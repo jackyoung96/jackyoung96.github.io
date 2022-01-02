@@ -3,7 +3,7 @@ title:               Jackyoung
 tagline:             'Autonomous vehicle engineer'
 description:         'An autonomous vehicle researcher in SNU ECS.'
 url:                 'http://jackyoung96.github.io'
-baseurl:             ""
+# baseurl:             ""
 paginate:            5
 permalink:           pretty
 
