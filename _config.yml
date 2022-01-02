@@ -17,6 +17,8 @@ author:
 plugins:
   - jekyll-paginate
   - jekyll-remote-theme
+  - jekyll-sitemap 
+  - jekyll-feed
 
 # Custom vars
 version:             0.0.1
