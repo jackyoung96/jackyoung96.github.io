@@ -44,28 +44,28 @@ PbRL은 사용지의 데이터로부터 preferece model을 유추하는데 목�
 
 ### Markov decision processes with preferences (MDPP)
 
-MDPP는 sextuple로 구성됩니다. 
+MDPP는 sextuple로 구성됩니다.  
 $$
 (S,A,\mu,\delta,\gamma,\rho)
-$$
+$$  
 $$S,A$$는 state와 action space를 나타내고, $$\mu$$는 initial state distribution, $$\delta$$는 transition probability $$\delta(s'|s,a)$$ 를 나타냅니다. $$\gamma\in[0,1]$$는 discount factor겠죠.
 <br />
 
 이제 특이한 건 $$\rho$$ 인데요, 이는 probability distribution of preference 입니다. 사람은 언제나 stochasticity가 있기 때문에, 같은 선택지에서도 다른 선택을 할 수 있습니다. 이를 확률로 나타내는 거죠. 
 즉 $$\rho(\tau_1\succ\tau_2)$$라고 하면 $$\tau_1$$을 $$\tau_2$$보다 선호할 확률인 것입니다. strict하게 접근하면 여집합이 성립하는 확률이고요, preference라는게 모호할 수도 있으니 여집합은 성립하지 않을수도 있습니다.  
-이제 데이터 셋을 정의합니다. 모든 trajectory를 모아 놓은 것을 아래와 같이 정의합니다.
+이제 데이터 셋을 정의합니다. 모든 trajectory를 모아 놓은 것을 아래와 같이 정의합니다.  
 $$
 \zeta=\{\zeta_i\}=\{\tau_{i1}\succ\tau_{i2}\}_{i=1\dots N}
-$$
+$$  
   
 <br />
 
 ### Objective
-
+  
 $$
 \boldsymbol{\tau}_{1} \succ \boldsymbol{\tau}_{2} \Leftrightarrow \operatorname{Pr}_{\pi}\left(\boldsymbol{\tau}_{1}\right)>\operatorname{Pr}_{\pi}\left(\boldsymbol{\tau}_{2}\right),
-$$
+$$  
 $$
 where\ \ \operatorname{Pr}_{\pi}(\boldsymbol{\tau})=\mu\left(s_{0}\right) \prod_{t=0}^{|\boldsymbol{\tau}|} \pi\left(a_{t} \mid s_{t}\right) \delta\left(s_{t+1} \mid s_{t}, a_{t}\right)
-$$
+$$  
 을 만족하는 $$\pi^*$$를 찾는 것이 목표가 되겠죠.
