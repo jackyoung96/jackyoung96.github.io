@@ -163,4 +163,47 @@ MAP나 MLE나 결과는 비슷하니까 MLE로 생각하면 직관적으로 이�
 <center>
 $$\operatorname{Pr}\left(\pi_{1} \succ \pi_{2}\right) \approx \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}\left(\boldsymbol{\tau}_{i}^{\pi_{1}} \succ \boldsymbol{\tau}_{i}^{\pi_{2}}\right)$$
 </center>
-딱봐도 그렇듯이 엄청난 양의 비교가 필요하다는 단점이 있습니다.
+딱봐도 그렇듯이 엄청난 양의 비교가 필요하다는 단점이 있습니다.  
+
+<br/>
+
+### Learning a preference model
+
+Preference model은 classification 문제를 푸는 것과 같습니다.
+<center>
+$$C\left(a \succ a^{\prime} \mid s\right)$$
+</center>
+어떤 state $$s$$에 대해서 두 action의 preference를 알아낼 수 있는 모델이 되겠습니다. <a href="https://link.springer.com/content/pdf/10.1007/s10994-012-5313-8.pdf" title="PbRL-preference-model">Fürnkranz et al(2012)</a>가 제안한 알고리즘을 살펴보겠습니다. 
+
+![image](https://user-images.githubusercontent.com/57203764/147988972-b8ed892e-59bd-4154-be5c-3059bcb16431.png)
+
+line 5를 자세히 보겠습니다. initial state $$s$$에 대해서 모든 action을 다 훑는 것입니다. 그 이후로는 current policy로 trajectory를 형성합니다. 이 데이터를 바탕으로 preference model을 (classification model) 구성하게 되면, greedy policy를 이끌어낼 수 있습니다.
+<center>
+$$\pi^{*}(a \mid s)= \begin{cases}1 & \text { if } a=\arg \max _{a^{\prime}} k\left(s, a^{\prime}\right) \\ 0 & \text { else }\end{cases},$$  
+$$where\ \ k(s, a)=\sum_{\forall a_{i} \in A(s), a_{j} \neq a} C\left(a_{i} \succ a_{j} \mid s\right)=\sum_{\forall a_{i} \in A(s), a_{j} \neq a} C_{i j}(s)$$
+</center>
+$$k(s,a)$$의 경우 resulting count라고 하는데, 높을 수록 가장 action set 내에서 preference가 높다고 보면 되겠습니다. 다만 continuous action set에서 어떻게 동작할 수 있을지는 의문입니다.  
+또한 특징으로는 $$C$$를 countinuous function으로 사용할 경우, uncertainty를 얻어낼 수 있어서, exploration에 사용할 수 있다고 합니다. (Discrete이라고 안될 게 뭐지 싶지만 continuous가 더 잘되긴 하겠죠)  
+
+<br/>
+
+### Learning a utility function
+
+Utility function은 RL에서 reward와 유사하지만 약간의 차이를 나타냅니다.
+> However, in the PbRL case it is sufficient to find a reward function (=utility function) that induces the same, optimal policy as the true reward function.
+
+Classic RL처럼 고정된 reward의 형태를 나타낼 필요가 없기 때문에 따로 이름을 붙여준 것입니다. 기본적으로는 Scalar utility를 사용하는데요, 아래와 같이 간단히 정의됩니다.
+<center>
+$$\boldsymbol{\tau}_{i 1} \succ \boldsymbol{\tau}_{i 2} \Leftrightarrow U\left(\boldsymbol{\tau}_{i 1}\right)>U\left(\boldsymbol{\tau}_{i 2}\right)$$
+</center>
+
+우리는 여기에서 utility를 최대화하는 policy를 선택하기만 하면 됩니다.
+<center>
+$$\pi^{*}=\max _{\pi} \mathbb{E}_{\operatorname{Pr}_{\pi}(\boldsymbol{\tau})}[U(\boldsymbol{\tau})]$$
+</center>
+
+![image](https://user-images.githubusercontent.com/57203764/147990022-43a4d7fa-f36c-4abe-a594-420b8715065e.png)
+
+알고리즘을 살펴보겠습니다. 우선 모든 trajectory의 initial state는 sampling 된 값이므로, 서로 다른 곳에서 시작하는 trajectories임을 알 수 있습니다. 데이터셋을 만든 후 trajectory pair sampling을 통해서 **utility function을 학습하게 됩니다 (line 12)**. 여기에서 어떤 함수의 형태를 사용할까요?
+
+#### Linear utility function
