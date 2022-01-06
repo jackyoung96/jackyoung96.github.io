@@ -204,6 +204,100 @@ $$\pi^{*}=\max _{\pi} \mathbb{E}_{\operatorname{Pr}_{\pi}(\boldsymbol{\tau})}[U(
 
 ![image](https://user-images.githubusercontent.com/57203764/147990022-43a4d7fa-f36c-4abe-a594-420b8715065e.png)
 
-알고리즘을 살펴보겠습니다. 우선 모든 trajectory의 initial state는 sampling 된 값이므로, 서로 다른 곳에서 시작하는 trajectories임을 알 수 있습니다. 데이터셋을 만든 후 trajectory pair sampling을 통해서 **utility function을 학습하게 됩니다 (line 12)**. 여기에서 어떤 함수의 형태를 사용할까요?
+알고리즘을 살펴보겠습니다. 우선 모든 trajectory의 initial state는 sampling 된 값이므로, 서로 다른 곳에서 시작하는 trajectories임을 알 수 있습니다. 데이터셋을 만든 후 trajectory pair sampling을 통해서 **utility function을 학습하게 됩니다 (line 12)**. 그렇다면 utility function의 형태는 어떻게 되는 걸까요? 
 
 #### Linear utility function
+
+Linear utility function은 다음과 같이 정의될 수 있습니다.
+<center>
+$$U(\boldsymbol{\tau})=\boldsymbol{\theta}^{T} \boldsymbol{\psi}(\boldsymbol{\tau})$$
+</center>
+이 때 $$\psi$$는 feature function을 나타냅니다. prior knowledge가 있다면 이미 정의되어 있는 것일테고, DL을 사용하여 이를 추출할 수도 있겠습니다.  
+최종 목표는 당연히 optimal utility function을 parameterize하는 $$\theta$$를 구하는 것입니다.  
+
+Preference를 생각하려면 두 개의 trajectory를 비교해야겠죠. 그 utility 차이를 다음과 같이 정의합니다.
+<center>
+$$d\left(\boldsymbol{\theta}, \zeta_{i}\right)=\boldsymbol{\theta}^{T}\left(\boldsymbol{\psi}\left(\boldsymbol{\tau}_{i 1}\right)-\boldsymbol{\psi}\left(\boldsymbol{\tau}_{i 2}\right)\right)$$
+</center>
+우리는 이 차이가 커지도록 만들면 되겠습니다. 그래야 preference를 명확하게 구별해내는 utility function을 찾아낼 수 있을테니까요. 최적화 방법으로는 Loss를 사용하는 방법, 그리고 Log likelihood를 사용하는 방법이 있습니다. 근본적으로 큰 차이는 없습니다만 Loss를 사용하면 최소화, Log likelihood를 사용하면 최대화 문제이브로 function shape이 좌우 대칭 형태가 됩니다. 기존 연구들에서 사용한 방법들인데 크게 중요하지는 않을 것 같습니다. (저는 DL을 쓸거니까요)
+
+![image](https://user-images.githubusercontent.com/57203764/148012135-75474499-d4ca-40ea-a2f1-a9966363085c.png)
+
+![image](https://user-images.githubusercontent.com/57203764/148012159-4246e0ab-0f83-4c77-88c2-3b0516f6dfbf.png)  
+<br/>
+
+혹은 이마저도 귀찮다면 그냥 gradient descent를 사용해도 무방합니다. loss function으로 $$y=-x$$를 사용하면 $$\boldsymbol{\theta}_{k+1}=\boldsymbol{\theta}_{k}+\alpha\left(\boldsymbol{\psi}\left(\boldsymbol{\tau}_{k 1}\right)-\boldsymbol{\psi}\left(\boldsymbol{\tau}_{k 2}\right)\right)$$로 구할 수 있습니다.   
+
+이러한 Linear utility function은 간단하지만 다음과 같은 경고를 포함하고 있습니다.
+> However, it is **unclear** how the aggregated utility loss L(θ, ζ) is related to the policy loss L(π, ζ) (see Sec. 2.3), as the policy is subject to the system dynamics whereas the utility is not.
+
+앞에서 살펴보았던 policy loss의 경우 policy가 실제로 action을 취하는 주체이다보니 system dynamics가 고려되었습니다만, 방금 utility function의 경우 주어진 trajectory에 대해서 단순한 utility 계산만 했죠. 그렇기 때문에 둘 사이의 관계가 **불명확**하다는 것입니다.  
+
+#### Non-linear utility function
+
+이런 저런 방법이 소개되었는데요, 가장 주목할 점은 DL을 사용하는 방식입니다. 앞에서 소개했던 PEBBLE 논문에서 baseline으로 삼기도 했던 방법입니다.  
+
+<a href="https://arxiv.org/pdf/1706.03741.pdf" title="DRL_from_human_preference" >**DRL from human preference - Christiano et al.**</a>  
+
+이 논문도 거쳐가야 하기 때문에, 추후에 따로 다루도록 하겠습니다.  
+
+<br/>
+
+### The temporal credit assignment problem
+
+Classic RL에서도 temporal credit assignment는 커다란 문제였습니다. Policy의 value는 미래의 모든 가능성을 포함하기때문에, 현재 state에서 취하는 action이 얼마나 dominant한 영향을 끼칠지 알기가 어렵습니다. 이를 해결하기 위해서 Advantage를 사용하는 것이 표준적이라고 논문에서 설명하고 있습니다. 그러나 이를 **explicitly** 해결하기는 어렵습니다.
+> Yet, if we try to solve the credit assignment problem explicitly, we also require the expert to comply with the Markov property. This assumption can easily be violated if we do not use a full state representation, i.e., if the expert has more knowledge about the state than the policy
+
+Markov를 가정하기 위해서는 expert가 true state를 알아야 합니다. 하지만 세상의 모든 것이 Hidden Markov model인데 알 방법이 없겠죠. 
+
+Utility를 정의하는 방법은 크게 세가지로 나뉩니다. 
+1. Value-based utility  
+   $$\pi^{*}(a \mid s)=\mathbb{I}\left(a=\underset{a^{\prime}}{\arg \max } \mathbb{E}_{\delta}\left[U\left(s^{\prime}\right) \mid s, a^{\prime}\right]\right)$$
+   Transition model을 알 때만 사용 가능함.
+2. Return-based utility  
+   $$U(\boldsymbol{\tau})=\boldsymbol{\theta}^{T} \boldsymbol{\psi}(\boldsymbol{\tau})$$
+   Reward-based utility로 일반화 가능함.
+3. Reward-based utility
+   $$U\left(s_{t}, a_{t}\right)=\boldsymbol{\theta}^{T} \boldsymbol{\varphi}\left(s_{t}, a_{t}\right)$$
+
+3번의 경우 사실상 reward와 동일한 효과를 내는 것입니다. Preference 기반으로 reward를 알아낸다는 점에서 IRL과 유사한 형태를 띄게 되는 것이죠. 하지만 우리는 trajectory 사이의 preference를 비교할 것이기 때문에 return-based utility를 사용하는 것이나 마찬가지입니다.  
+<center>
+$$U(\boldsymbol{\tau})=\boldsymbol{\theta}^{T} \boldsymbol{\psi}(\boldsymbol{\tau})=\sum_{t=0}^{|\boldsymbol{\tau}|} \gamma^{t} U\left(s_{t}, a_{t}\right)$$
+</center>
+
+<a href="https://arxiv.org/pdf/1706.03741.pdf" title="DRL_from_human_preference" >**DRL from human preference - Christiano et al.**</a> 논문에서도 reward-based utility를 사용했습니다만 두 가지 특징이 있었습니다.
+
+> In contrast to conventional reinforcement learning, a discount factor of γ = 1 is used for U(τ) in all approaches because the expert should not need to consider the effects of decay.
+
+> A major problem as all considered trajectories have a finite length.
+
+사람은 decay가 필요 없으니 안하겠다, 그리고 finite length를 사용할 수 밖에 없었다. 두 가지 모두 명확합니다.  
+
+<br/>
+
+### Trajectory preference elicitation
+
+그렇다면 trajectory query를 어떻게 구성해야 expert로부터 좋은 feedback을 얻을 수 있을까요? Expert에게 preference를 얻어내는 것은 굉장히 cost가 높은 작업입니다. 자동화가 안되어 있는 작업이니까요. 최대한 적은 query를 사용해야 하는데, 그러면 exploration 문제가 발생해 local optimum에 빠지게 됩니다.   
+
+#### Trajectory generation
+
+PbRL의 Trajectory는 3가지의 특징을 가져야 합니다.
+> In order to be informative, the obtained preferences should be different from existing trajectories. Yet, the trajectories should also be close to optimal in order to obtain useful information. Furthermore, the trajectories need to contain sufficient information about the transition function to compute an optimal policy.
+
+1. Preference를 구분할 수 있을 정도로 구별되어야 하고
+2. Optimal trajectory에 충분히 가까워야 하며
+3. Transition function에 대한 정보를 충분히 담고 있어야 합니다.
+
+Exploration을 충분히 해서 최대한 다양한 종류의 trajectory를 뽑아낸다면 3가지 조건을 만족할 수 있습니다. Preference query는 적게 할 수록 좋지만, trajectory generation 자체는 노동력이 들지 않으니 많으면 많을 수록 좋습니다.  
+Exploration은 undirected, directed, heterogeneous, user-guided exploration으로 나뉩니다. 모든 연구마다 방법이 다르기 때문에, 자세히 설명하지는 않겠습니다만, DRL을 이용하는 경우 stochastic policy를 이용한 undirected exploration을 사용한다고 소개하고 있습니다. SAC 같은 알고리즘을 쓰면 Entropy가 높아지는 방향으로 exploration을 하게 되니까요.   
+<br/>
+
+#### Preference query generation
+
+만들어진 trajectory로부터 어떤 query를 추출할 수 있을까요? 마찬가지로 3가지 방식이 있습니다.
+1. Exhaustive generation : All possible queries (데이터셋 전부 사용)
+2. Greedy generation : Use trajectories generated from the optimized policy (최신의 policy로 만들어낸 trajectory만 사용)
+3. Interleaved generation : Several ways (여러가지 방식)
+
+높은 utility를 가진 trajectory를 고르기도 하고, ensemble 방식을 사용해 variance가 큰 녀석을 고르기도 하고, 연구마다 다양한 방식이 존재합니다.  
+
