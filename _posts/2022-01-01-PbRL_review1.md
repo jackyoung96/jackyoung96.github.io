@@ -301,3 +301,6 @@ Exploration은 undirected, directed, heterogeneous, user-guided exploration으�
 
 높은 utility를 가진 trajectory를 고르기도 하고, ensemble 방식을 사용해 variance가 큰 녀석을 고르기도 하고, 연구마다 다양한 방식이 존재합니다.  
 
+<br/><br/><br/>
+
+**계속 이어서 작성하는 중입니다..ㅠㅠ **
