@@ -85,6 +85,11 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 38rem;
   }
 }
+@media (min-width: 80em) {
+  .container {
+    max-width: 50rem;
+  }
+}
 
 
 /*
@@ -555,4 +560,9 @@ a.pagination-item:hover {
 /* Only one tweak for a reverse layout */
 .layout-reverse.sidebar-overlay #sidebar-checkbox:checked ~ .sidebar {
   box-shadow: -.25rem 0 .5rem rgba(0,0,0,.1);
+}
+
+img[src$="centerme"] {
+  display:block;
+  margin: 0 auto;
 }

@@ -19,6 +19,7 @@ plugins:
   - jekyll-remote-theme
   - jekyll-sitemap 
   - jekyll-feed
+  - jekyll-image-size
 
 # Custom vars
 version:             0.0.1
