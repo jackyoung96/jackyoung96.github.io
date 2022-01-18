@@ -1,7 +1,7 @@
 # Setup
-title:               Jackyoung
+title:               Jaekyung Cho
 tagline:             'Autonomous vehicle engineer'
-description:         'An autonomous vehicle researcher in SNU ECS.'
+description:         'An autonomous vehicle researcher in SNU ECE.'
 url:                 https://jackyoung96.github.io
 # baseurl:             ""
 paginate:            5
@@ -26,3 +26,10 @@ version:             0.0.1
 google_analytics_id: #UA-XXXX-Y
 
 remote_theme: poole/lanyon
+
+# Explanation
+name: 'Jaekyung Cho'
+description: | 
+  Autonomous vehicle engineer<br>
+  Electrical and Computer Engineer, SNU<br>
+  Autonomous Robot Intelligence Laboratory
