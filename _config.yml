@@ -3,7 +3,7 @@ title:               Jaekyung Cho
 tagline:             'Autonomous vehicle engineer'
 description:         'An autonomous vehicle researcher in SNU ECE.'
 url:                 https://jackyoung96.github.io
-# baseurl:             ""
+# baseurl:             
 paginate:            5
 permalink:           pretty
 
@@ -33,3 +33,6 @@ description: |
   Autonomous vehicle engineer<br>
   Electrical and Computer Engineer, SNU<br>
   Autonomous Robot Intelligence Laboratory
+
+github:
+  repo: https://github.com/jackyoung96

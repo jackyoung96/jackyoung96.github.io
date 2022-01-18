@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Paper review - A survey of preference-based reinforcement learning methods 1
+title: Paper review - A survey of preference-based reinforcement learning methods
 ---
 
 2022년 제 블로그의 첫 글이자 첫 논문 리뷰는 A survey of preference-based reinforcement learning methods 부터 시작해 보겠습니다. 처음 Preference-based RL를 알게 된 건 Berkeley에 계시는 Kimin Lee 박사님이 하신 2021년 여름방학에 진행된 SNU Summer AI 강연이었습니다 (강연을 잘하셔서 정말 재밌게 들었습니다. 관심 있으신 분들은 꼭 들어보세요! <a href="https://www.youtube.com/watch?v=MiwOvaywtew&t=569s" title="PEBBLE">SNU summer AI - PEBBLE</a>).

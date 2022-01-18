@@ -1,0 +1,24 @@
+img[src$="centerme"] {
+    display:block;
+    margin: 0 auto;
+}
+
+.year, .publication{
+border-top: 2px solid #ccc;
+color: #ccc;
+margin: 4ex 0ex 1ex 0;
+/* padding-top: 1ex; */
+text-align: right;
+font-size: 130%;
+}
+
+.masthead{
+    width: 100%;
+    position: fixed;  
+    background-color: #fff;      
+    color: #fff;
+}
+
+.container.content{
+    padding-top: 100px;
+}
