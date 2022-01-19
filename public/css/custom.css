@@ -22,3 +22,7 @@ font-size: 130%;
 .container.content{
     padding-top: 100px;
 }
+
+.utterances{
+    float: left;
+}
