@@ -7,7 +7,28 @@ title: Paper review - A survey of preference-based reinforcement learning method
 리뷰 논문부터 시작해서 한 번 흐름을 살펴보죠.  
 
 ![image](https://user-images.githubusercontent.com/57203764/147902365-1f6a9a32-b722-43f7-8b64-c2ba0a788e67.png)
-<br /><br /><br />
+<br />
+
+Table of contents
+   - [Introduction](#introduction)
+   - [Preliminaries](#preliminaries)
+     - [Preference learning](#preference-learning)
+     - [Markov decision processes with preferences (MDPP)](#markov-decision-processes-with-preferences-mdpp)
+     - [Objective](#objective)
+     - [PbRL algorithms](#pbrl-algorithms)
+     - [Related problem settings](#related-problem-settings)
+   - [Design principles of PbRL](#design-principles-of-pbrl)
+     - [Learning a policy](#learning-a-policy)
+     - [Learning a preference model](#learning-a-preference-model)
+     - [Learning a utility function](#learning-a-utility-function)
+        - [Linear utility function](#linear-utility-function)
+        - [Non-linear utility function](#non-linear-utility-function)
+     - [The temporal credit assignment problem](#the-temporal-credit-assignment-problem)
+     - [Trajectory preference elicitation](#trajectory-preference-elicitation)
+        - [Trajectory generation](#trajectory-generation)
+        - [Preference query generation](#preference-query-generation)
+
+<br><br>
 
 ## Introduction
 ---
