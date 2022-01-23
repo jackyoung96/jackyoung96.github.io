@@ -1,30 +1,874 @@
----
-layout: null
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{{ site.title | xml_escape }}</title>
-    <description>{{ site.description | xml_escape }}</description>
-    <link>{{ site.url }}{{ site.baseurl }}/</link>
-    <atom:link href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml"/>
-    <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
-    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
-    <generator>Jekyll v{{ jekyll.version }}</generator>
-    {% for post in site.posts limit:30 %}
+    <title>Jaekyung Cho</title>
+    <description>Autonomous vehicle engineer&lt;br&gt;
+Electrical and Computer Engineer, SNU&lt;br&gt;
+Autonomous Robot Intelligence Laboratory
+</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 23 Jan 2022 14:16:13 -0500</pubDate>
+    <lastBuildDate>Sun, 23 Jan 2022 14:16:13 -0500</lastBuildDate>
+    <generator>Jekyll v4.2.1</generator>
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.content | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
-        <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
-        {% for tag in post.tags %}
-        <category>{{ tag | xml_escape }}</category>
-        {% endfor %}
-        {% for cat in post.categories %}
-        <category>{{ cat | xml_escape }}</category>
-        {% endfor %}
+        <title>Paper review - Learning latent representations to influence multi-agent interaction</title>
+        <description>&lt;p&gt;세 번째 논문 리뷰입니다. 2020년 CoRL에서 Best paper award를 거머쥔 멋진 논문입니다. 사실 Preference based RL은 아니지만 1) Human interaction을 고려한다는점, 2) 실험을 아주 잘 설계하고 멋진 결과를 이끌어 냈다는 점, 에서 이 논문을 리뷰해보려 합니다.&lt;/p&gt;
+
+&lt;p&gt;우리가 로봇을 학습시키더라도, 그 로봇과 상호작용하는 사람과 다른 로봇들이 다수 존재합니다. 이러한 Agent들은 계속해서 전략을 update 할텐데, 이전의 행동으로부터 다음 행동전략을 예측하고, 이를 바탕으로 ego agent의 behavior또한 계속 update 하겠다는 것이 이 연구의 핵심입니다. 이를 이용하면 상대 agent가 특정 행동을 하도록 유도할 수도 있다고 주장하였습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Table of contents&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#related-works&quot;&gt;Related works&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#opponent-modeling&quot;&gt;Opponent modeling&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#marl&quot;&gt;MARL&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#influence-through-interactions&quot;&gt;Influence through interactions&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#pomdp&quot;&gt;POMDP&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#repeated-interactions-with-non-stationary-agents&quot;&gt;Repeated Interactions with Non-stationary agents&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#learning-and-influencing-latent-intent-lili&quot;&gt;Learning and Influencing Latent Intent (LILI)&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#influencing-by-optimizing-for-long-term-rewards&quot;&gt;Influencing by optimizing for long-term rewards&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiments&quot;&gt;Experiments&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#simulated-environments&quot;&gt;Simulated environments &lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#air-hockey-result&quot;&gt;Air Hockey result&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#playing-against-a-human-expert&quot;&gt;Playing against a Human Expert&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;
+&lt;br /&gt;&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;아주 훌륭한 Insight가 담긴 이야기로부터 이 논문이 시작됩니다. (굉장히 인상깊은 논문의 시작이고, 눈길을 끌기 좋다고 개인적으로 생각합니다.)&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;. The first time you encounter this autonomous car, your intention is to act cautiously: when the autonomous car slows, you also slow down. But when it slowed without any apparent reason, your strategy changes: the next time you interact with this autonomous car, you drive around it without any hesitation. The autonomous car — which originally thought it had learned the right policy to slow your car — is left confused and defeated by your updated behavior&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;실제로 일어날 법한 일이죠. 자율주행 차량에 사람들이 적응하기 시작하면, “어차피 알아서 잘 피하겠지”라는 생각에 주변에서 난폭하게 끼어들기를 시도할겁니다. 이런 상황을 해결하기 위해서 다른 Agent들의 의도를 파악하는 것은 중요합니다. 다만 본 논문은 이 의도가 계속해서 변화하는 상황에 집중한 연구로, 위 예시와는 약간의 거리가 있습니다. &lt;br /&gt;
+&lt;strong&gt;실제로 도로 위에서 한 차량과 interaction을 반복해서 하는 경우는 없죠. 단 한 번의 episode만이 존재하기 때문에, general 한 의도인 human preference를 파악하는 것이 실제로는 더 중요하다고 생각합니다.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;본 연구에서 대표적으로 나타나는 시나리오는 아래 그림과 같습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/149857934-20c0b2f4-86d9-45f4-b452-ca7c904139ab.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;60%&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;i 번째에 Opponent가 오른쪽으로 하키공을 날렸고, ego agent가 성공적으로 방어합니다.&lt;/li&gt;
+  &lt;li&gt;i+1 번째에 Opponent는 오른쪽이 안된다고 생각하고 가운데로 날렸으나, 또 다시 방어합니다.&lt;/li&gt;
+  &lt;li&gt;i+2 번째에 Opponent는 둘 다 아닌 왼쪽을 선택하고, ego agent는 이 사실을 미리 예측하고 방어합니다. i, i+1 번째의 시도로부터 상대의 strategy를 latent vector의 형태로 예측한 것입니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;이제 본격적인 내용을 살펴보기에 앞서, 정확히 어떤 연구가 수행된 것인지 contribution을 살펴보죠. 본 논문에서 주장한 contribution은 다음과 같습니다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Learning latent representation&lt;br /&gt;
+ Opponent agent들의 strategy를 latent vector의 형태로 배울 수 있다.&lt;/li&gt;
+  &lt;li&gt;Influencing other agents&lt;br /&gt;
+Opponent agent들이 특정 strategy를 가지도록 유도할 수 있다.&lt;/li&gt;
+  &lt;li&gt;Testing in multi-agent settings&lt;br /&gt;
+실제 real world 7 DoF 로봇으로 검증하였다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;related-works&quot;&gt;Related works&lt;/h2&gt;
+
+&lt;h3 id=&quot;opponent-modeling&quot;&gt;Opponent modeling&lt;/h3&gt;
+&lt;p&gt;MARL (Multi-Agent Reinforcement Learning)에서 자주 사용하는 방법입니다. Agent 간 communication이 없다면, 다른 agent가 정확히 어떤 행동을 할 것인지 예측하는 수밖에 없습니다. 왜냐하면 transition probability가 다른 agent의 action에 좌우되기 때문에, 이를 알지 못한다면 어떤 action을 내리는 것이 optimal인지 알 수 있는 방법이 없습니다.&lt;br /&gt;
+이 내용을 처음으로 주장한 논문은 2017년 OpenAI에서 발표한 &lt;a href=&quot;https://arxiv.org/abs/1706.02275&quot;&gt;Multi-agent actor-critic for mixed cooperative-competitive environment&lt;/a&gt; 논문입니다.&lt;/p&gt;
+
+&lt;p&gt;다만 다른 agent 들의 strategy가 static 하다고 가정하기 때문에, 본 논문과는 차이가 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;marl&quot;&gt;MARL&lt;/h3&gt;
+&lt;p&gt;일반적으로는 centralized training framework를 사용하고, communication이 가능하다고 가정합니다. 본 논문은 decentralized에 non-communication환경을 사용합니다.&lt;br /&gt;
+이게 가능한 이유는 &lt;strong&gt;other agents have predictable strategies which can be captured by latent representations&lt;/strong&gt; 라는 아주 강력한 가정을 바탕으로 하고 있기 때문입니다. 사실 이게 사실인지는 명확하지 않습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;influence-through-interactions&quot;&gt;Influence through interactions&lt;/h3&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;In particular, robots have demonstrated influence over humans by leveraging human trust [18, 32], generating legi le motions [33], and identifying and manipulating structures that underlie human-robot teams [34]. Other works model the effects of robot actions on human behavior in driving [35, 36] and han over [37] scenarios in order to learn behavior that influences humans&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;굉장히 많은 연구들이 진행된 부분입니다. 이 내용들은 추후 리뷰하도록 하겠습니다. 쟁점은, 여기서 소개된 연구들의 경우 opponent agent의 strategy recovery나 reward function recovery에 집중하고 있으나, 본 논문은 latent vector의 형태로 표현함으로써 더욱 general하게 동작할 수 있다는 점입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;pomdp&quot;&gt;POMDP&lt;/h3&gt;
+&lt;p&gt;MARL 문제 답게, POMDP를 가정합니다. MPD라고 해버리면 상대의 state도 알아야 하니까 성립이 안되겠죠. 더욱 신기한 것은 &lt;strong&gt;상대가 Non-Markovian strategy를 가지고 있어도 예측이 가능&lt;/strong&gt;하다고 주장하고 있습니다. 이건 실험적으로 그렇다는 거고 이론적으로 증명을 하지는 않았네요.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;repeated-interactions-with-non-stationary-agents&quot;&gt;Repeated Interactions with Non-stationary agents&lt;/h2&gt;
+&lt;p&gt;MARL을 가정하고 있으나 우선은 2개의 Agent로 구성된 환경을 다룹니다. Scalable 하다고는 하지만, 실험적으로 보이지는 않았습니다. 실제로도 Scalability가 높다고 생각됩니다. Linear하게 증가하거든요.&lt;/p&gt;
+
+&lt;p&gt;우선 이 문제는 HiP-MDP (Hidden Parameter Markov Decision Process) 로 정의됩니다. Parameter라는 것은, 실제로 무슨 의미를 가지고 있는지는 알 수 없는 값이 MDP에 포함된다는 것이겠고, 바로 Latent vector of opponent strategy가 되겠습니다. 우리는 i-step의 latent vector를 \(z^i\)로 정의합니다.&lt;/p&gt;
+
+&lt;p&gt;이 Latent vector에 영향을 받는 것은 2가지 입니다. Transition probability와 Reward function으로 직관적으로도 이해가 가능합니다.&lt;/p&gt;
+&lt;center&gt;
+$$T(s&apos;|s,a,z^i),\\R(s,z^i)$$
+&lt;/center&gt;
+
+&lt;p&gt;우리는 ego agent의 trajectory를 이용하여 다음 step의 opponent latent strategy를 예측할 수 있습니다. 자차의 trajectory는 다음과 같이 정의됩니다.&lt;/p&gt;
+
+&lt;center&gt;
+$$\tau^i=\{(s_1,a_1,r_1),\dots(s_H,a_H,r_H)\}$$
+&lt;/center&gt;
+
+&lt;p&gt;결론적으로 우리가 학습하고자 하는 모델은 Markovian latent dynamics는,&lt;/p&gt;
+&lt;center&gt;
+$$z^{i+1}\sim f(\cdot|z^i,\tau^i)\sim f(\cdot|\tau^i)$$
+&lt;/center&gt;
+&lt;p&gt;입니다. \(z^i\)는 \(\tau^i\)에 녹아들어 있다고 가정하는 것이죠.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;learning-and-influencing-latent-intent-lili&quot;&gt;Learning and Influencing Latent Intent (LILI)&lt;/h2&gt;
+
+&lt;p&gt;사실 모든 것은 그림에 잘 표현되어 있습니다. (Best paper를 받으려면 역시 그림을 잘 그려야 되는 것 같아요)&lt;/p&gt;
+
+&lt;p&gt;우리의 목적은 Latent strategy를 예측하는 \(\mathcal{E}_\phi\)를 찾는 것입니다. 그런데 \(z^i\)가 뭔지 알 수 없으니 supervised learning을 할 수가 없습니다. 따라서 그림 우측의 representation learning 부분의 AutoEncoder 구조를 사용하여 latent vector를 배우게 됩니다.&lt;/p&gt;
+
+&lt;p&gt;아주 간단한 구조입니다. \(\tau^{k-1},\tau^k\)는 각각 \((s,a,r,s&apos;)\)의 tuple로 이루어져 있습니다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;\(\mathcal{E}_\phi\)는 \(\tau^{k-1}\)의 \((s,a,r,s&apos;)\)을 입력으로 받아 \(z^k\)를 내놓습니다.&lt;/li&gt;
+  &lt;li&gt;\(\mathcal{D}_\phi\)는 \(z^k\)를 입력으로 받아 Transition probability와 Reward를 예측합니다. 즉, \((z^k,s,a)\)를 입력으로 받고 \((r,s&apos;)\)을 내놓습니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;이 Autoencoder를 학습하기 위한 objective function은 다음과 같습니다.&lt;/p&gt;
+&lt;center&gt;
+$$\mathcal{J}_{rep}=\max _{\phi, \psi} \sum_{i=2}^{N} \sum_{t=1}^{H} \log p_{\phi, \psi}\left(s_{t+1}^{i}, r_{t}^{i} \mid s_{t}^{i}, a_{t}^{i}, \tau^{i-1}\right)$$
+&lt;/center&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/149860515-e20390c3-fd24-4730-b5fa-79cca3683a06.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;80%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;전체 encoder, decoder, RL networks를 학습시키는 과정은 아래 알고리즘에 자세히 설명되어 있습니다. 아주 간단한 알고리즘입니다. RL networks의 경우 SAC (Soft Actor Critic)을 사용하였고, \(\mathcal{J}_\pi,\mathcal{J}_Q\)는 각각 actor, critic loss를 의미합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/149862140-9964ba3e-8e4d-4008-a744-f3986bee83c0.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;70%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Encoder와 Decoder는 2 fully-connected layers of size 128을 사용하였고, Actor와 Critic은 2 fully-connected layers of size 256을 사용했다고 합니다. 또한 latent strategy \(z^i\) size는 8 입니다. 간단한 문제들을 해결하는 것이므로 충분합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;influencing-by-optimizing-for-long-term-rewards&quot;&gt;Influencing by optimizing for long-term rewards&lt;/h3&gt;
+
+&lt;p&gt;Experience buffer를 살펴보면 뭔가 이상한 점을 발견할 수 있습니다. Latent strategy가 계속해서 update 될테니 아마도 on-policy learning을 해야 할텐데, off-policy learning의 형태를 취하고 있다는 것입니다. 이상하지 않나요?&lt;br /&gt;
+실제로 저자는 2가지 방식을 분리해서 설명합니다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;LILI (No influence) : on-policy&lt;br /&gt;
+실제로 현재 가지고 있는 latent strategy predictor에 기반하여 최대한의 return을 이끌어내는 방식입니다. 즉, 학습을 할 때, 모든 trajectory를 보는 것이 아니라, 바로 직전의 trajectory만 가지고 학습을 하는 거겠죠.&lt;/li&gt;
+  &lt;li&gt;LILI : off-policy&lt;br /&gt;
+모든 trajectory를 다 사용합니다. 이는 무엇을 의미하냐면, Non-Markovian strategy를 가정하고, 모든 interaction에서 발생하는 최종 return을 최대화 하겠다는 것입니다. 식으로 표현하자면 아래와 같습니다.
+    &lt;center&gt;
+$$\max _{\theta} \sum_{i=1}^{\infty} \gamma^{i} \mathbb{E}_{\rho_{\pi_{\theta}}^{i}}\left[\sum_{t=1}^{H} R\left(s, z^{i}\right)\right]$$
+&lt;/center&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;결론부터 말하자면 LILI는 초반 학습이 느리지만 최종적으로 Opponent의 strategy를 ego agent에게 유리하도록 유도하는 특징을 보여줍니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;experiments&quot;&gt;Experiments&lt;/h2&gt;
+&lt;p&gt;실험은 3가지 가상환경 실험과, 실제 로봇실험으로 구성되었습니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;simulated-environments&quot;&gt;Simulated environments&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Point Mass&lt;br /&gt;
+Target point를 잡는 task, 그러나 target point의 위치는 모른다. Episode가 끝나면 target point는 ccw나 cw로 한칸 이동한다.&lt;/li&gt;
+  &lt;li&gt;Lunar Lander&lt;br /&gt;
+도착 지점이 계속 바뀌고, 그곳으로 landing해야 한다. 도착지점의 위치는 알 수 없다.&lt;/li&gt;
+  &lt;li&gt;Driving (2D, CARLA)&lt;br /&gt;
+차량을 추월하려 하는데, 앞 차량이 추월직전 차선을 변경한다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/149891710-3cfd4df7-05b0-4a51-a2cf-7851b60f134b.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;80%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+Baseline은 4가지가 사용되었습니다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Soft Actor Critic&lt;/li&gt;
+  &lt;li&gt;SLAC : Opponent strategy가 고정되어 있다고 가정&lt;/li&gt;
+  &lt;li&gt;LILAC : Opponent strategy가 env에 따라서 변한다고 가정&lt;/li&gt;
+  &lt;li&gt;Oracle : Opponent의 state와 policy를 안다고 가정&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;
+결과를 한 번 볼까요?&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/149892411-eb81754c-04f1-47d3-989f-490d8aa6695c.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;80%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;일단 모든 부분에서 압도적인 성능을 보이고 있습니다. 또한 Point Mass task의 경우 LILI는 point의 behavior를 유도하여 가둬버리는 결과를 도출하였습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;air-hockey-result&quot;&gt;Air Hockey result&lt;/h3&gt;
+
+&lt;p&gt;실제 로봇을 가지고 실험을 진행하였습니다. 게임은 다음과 같이 구성됩니다.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Opponent는 왼쪽,가운데,오른쪽 중 하나로 puck을 날림&lt;/li&gt;
+  &lt;li&gt;Ego agent는 왼쪽, 가운데, 오른쪽 중 하나로 action을 취함&lt;/li&gt;
+  &lt;li&gt;input은 puck의 vertical position (가까이 오고 있는지만 알 수 있음)&lt;/li&gt;
+  &lt;li&gt;왼쪽으로 방어하면 +2점, 나머지로 방어하면 +1점, 못막으면 0점&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Opponent의 Policy는 아래와 같습니다.
+&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/149893157-44047e42-13b6-494d-8040-5dbfd16f7c2f.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;40%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;아래는 실험 결과입니다. &lt;a href=&quot;https://sites.google.com/view/latent-strategies/&quot;&gt;결과 동영상&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/149892960-9742c232-6806-4c2d-b77e-935fd51d8038.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;70%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;놀랍게도 LILI는 Opponent가 왼쪽으로 puck을 던지도록 유도하는 것을 볼 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;playing-against-a-human-expert&quot;&gt;Playing against a Human Expert&lt;/h3&gt;
+&lt;p&gt;사람을 상대로도 latent strategy를 뽑아낼 수 있는지 실험하였습니다. 사실 직관적으로는 안될 거라고 생각했습니다. 사람이 생각없이 랜덤하게 던진다면 그걸 막아낼 수 없을거라고 생각하거든요. 그치만 가정이 하나 들어가 있었습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Like the robot striker, this human aims away from where the ego agent blocked during the previous interaction&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;이런 가정이라면 학습할 수 있겠죠. 실제로 SAC가 45%를 막아내는 동안 LILI는 73%를 막아내었습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;사람, 혹은 로봇과의 interaction 도중에 상대편의 latent strategy 변화를 예측하고, 그에 맞추어 나의 policy를 update하는 연구에 대해 알아보았습니다. 저자는 Human interaction의 경우 아직은 한계가 많았다고 서술하고 있는데요, 재미있는 주제라는 생각이 들었습니다. 실제로 Preference도 비슷한 방법을 통해서 녹여낼 수 있지 않을까 하는 생각이 듭니다.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 17 Jan 2022 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2022/01/17/PbRL_paper2/</link>
+        <guid isPermaLink="true">http://localhost:4000/2022/01/17/PbRL_paper2/</guid>
+        
+        
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>Paper review - Learning trajectory preferences for manipulators via iterative improvement</title>
+        <description>&lt;p&gt;두 번째 논문 리뷰입니다. 2013년 NeurIPS에 제출된 논문인 Learning trajectory preferences for manipulators via iterative improvement 를 리뷰해 보도록 하겠습니다.&lt;br /&gt;
+PbRL 자체가 오래된 연구 분야는 아닌 것 같아서, 2013년 논문이면 정말 고대 논문이라고 볼 수 있겠습니다. 다만, trajectory planning을 사용했다는 내용이 리뷰논문에 있었기 때문에, 첫 번째로 채택되었습니다. 딥러닝을 사용하지도 않았고, 아주 간단한 linear parameterized optimization을 사용하여 학습을 진행하였습니다.&lt;/p&gt;
+
+&lt;p&gt;실제로 Manipulator에서 human demonstration을 사용하는 연구는 유명했었죠. (로봇 이름이 뭐였는지는 기억이 잘 안나지만…)&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=M413lLWvrbI&quot;&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148876845-b50a671f-558f-42cb-8691-8951700e2d8a.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;50%&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;본 논문의 경우 &lt;strong&gt;High DoF 환경&lt;/strong&gt;에서는 Human demo보다는 slightly improved trajectory preference를 주는 것이 학습에 도움이 된다고 주장합니다.  그리고 그 방법과 결과를 살펴보겠습니다.&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Table of contents&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#related-works&quot;&gt;Related works&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#learning-and-feedback-model&quot;&gt;Learning and Feedback model&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#learning-algorithm&quot;&gt;Learning algorithm&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#features-describing-object-object-interactions&quot;&gt;Features describing object-object interactions&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#trajectory-features&quot;&gt;Trajectory features&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#learning-the-scoring-function&quot;&gt;Learning the scoring function&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#experiments&quot;&gt;Experiments&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#evaluation-metric&quot;&gt;Evaluation metric&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#results&quot;&gt;Results&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;p&gt;본 논문은 human preference가 필요한 이유를 여러 예시를 들어 잘 정의하고 있습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;a household robot should move a glass of water in an upright position without jerks while maintaining a safe distance from nearby electronic devices&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;For example, trajectories of heavy items should not pass over fragile items but rather move around them&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;같은 물건을 옮기더라도 어떤 물건이느냐, 주변에 어떤 것이 있느냐에 따라서 다르게 행동해야 한다는 것이 이 연구의 요지입니다. 이것은 reward function으로 나타내기 어려운 사람의 선호도 (Human preference) 이고, 이를 로봇이 학습할 수 있도록 하는 것입니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;The robot learns a general model of the user’s preferences in an online fashion.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;이 과정에서 학습이 잘 되는지를 사실 검증할 수 없는데, 저자는 regret이라는 것을 정의하였습니다. 사람과 로봇이 생각하는 trajectory의 rank이 같아질수록 regret이 작아지는 구조입니다 (뒷부분에 설명)&lt;/p&gt;
+
+&lt;p&gt;Grocery checkout task라는, 여러 물체를 두고 로봇팔을 이용해 이것들을 옮기는 문제를 실험환경으로 사용했습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;related-works&quot;&gt;Related works&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;p&gt;본 논문은 Learning from demonstratino (LfD)와 많은 비교를 하고 있습니다. LfD의 가장 큰 문제는 과연 user demonstration이 &lt;strong&gt;optimal&lt;/strong&gt;인지 알 수 없다는 것입니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;The user never discloses the optimal trajectory&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;즉, 본 연구의 목적은 어떻게 improve 하는지를 preference에 기반하여 배우는 것 입니다.&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Learning a score function representing the preferences in trajectories&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;이 때 PbRL의 방법 중 하나였던 utility function 과 유사하게 score function을 구하는 것을 목표로 하는 것입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;learning-and-feedback-model&quot;&gt;Learning and Feedback model&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;p&gt;우선 우리가 배우고자 하는 scoring function을 \(s(x,y;w)\)라고 하겠습니다. \(x\)는 context, \(y\)는 trajectory, 그리고 \(w\)는 우리가 학습하고자 하는 parameter입니다. Human preference 가 반영된 optimal scoring function은 \(s^*(x,y)\)로 나타내겠습니다.&lt;/p&gt;
+
+&lt;p&gt;Scoring function을 학습하는 과정은 3 step으로 나뉩니다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Step 1: The robot receives a context x. It then uses a planner to sample a set of trajectories, and ranks them according to its current approximate scoring function s(x, y; w). &lt;br /&gt;
+로봇이 x라는 context를 기반으로 multiple trajectory를 형성합니다. 그리고 scoring function으로 이들에게 rank를 부여합니다. RRT를 이용해서 trajectory generation을 실행하는데, randomness가 있기 때문에, 다양한 종류의 trajectory가 만들어지겠습니다.&lt;/li&gt;
+  &lt;li&gt;Step 2: The user either lets the robot execute the top-ranked trajectory, or corrects the robot by providing an improved trajectory y¯. This provides feedback indicating that s∗(x, y¯) &amp;gt; s∗(x, y).
+    &lt;ul&gt;
+      &lt;li&gt;Re-ranking : 가장 상위의 trajectory를 선택해 rank를 수정해 줌으로써 피드백을 부여합니다.&lt;/li&gt;
+      &lt;li&gt;Zero-G : trajectory waypoint 위치 중 하나를 직접 옮겨줍니다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Step 3: The robot now updates the parameter w of s(x, y; w) based on this preference feedback and returns to step&lt;br /&gt;
+ scoring function을 update합니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;참으로 쉬운 구조임이 분명합니다. 사실 알파고 논문이 나오기도 전의 논문이기 때문에, 현재의 딥러닝 관점에서는 허접해 보일수도 있습니다만, 이러한 이론이 배경이 되지 않았다면 딥러닝 또한 발전할 수 없었을 겁니다.&lt;/p&gt;
+
+&lt;p&gt;마지막으로 Performance evaluation을 위해 Regret을 정의합니다.&lt;/p&gt;
+&lt;center&gt;
+$$REG_T=\frac{1}{T}\sum_{t=1}^T[s^*(x_t,y_t^*)-s^*(x_t,y_t)]$$
+$$where\ y^*_t=argmax_ys^*(x_t,y)$$
+&lt;/center&gt;
+
+&lt;p&gt;그런데 뭔가 이상합니다. 사실 \(s^*\)는 알 수 없는 값이기 때문에 Regret을 구할 수 없습니다. 그래서 저자는 regret bound를 이용하여 수렴성을 증명합니다. (이후에 나옴)&lt;/p&gt;
+
+&lt;p&gt;Human feedback을 받기 위해서는 UI/UX가 필요합니다. 저자는 OpenRave라는 프로그램을 사용했다고 합니다. Multiple trajectories 중 하나를 클릭하면 그것의 rank가 가장 높아지도록 설정되었습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;learning-algorithm&quot;&gt;Learning algorithm&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;p&gt;우선 딥러닝을 사용하지 않는 논문이라는 점을 염두에 두도록 하죠.&lt;br /&gt;
+Scoring function은 아래와 같이 정의됩니다.&lt;/p&gt;
+&lt;center&gt;
+$$s(x,y;w_O,w_E)=w_O\dot\phi_O(x,y)+w_E\dot\phi_E(x,y)$$
+&lt;/center&gt;
+&lt;p&gt;여기서 O는 주변에 있는 trajectory가 interacting 하는 주변의 object들을 의미하고, E는 manipulate 해야 하는 object와 그 enviornment를 의미합니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;features-describing-object-object-interactions&quot;&gt;Features describing object-object interactions&lt;/h3&gt;
+&lt;hr /&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;We enumerate waypoints of trajectory y as \(y_1, .., y_N\) and objects in the environment as O = {\(o_1\), .., \(o_K\)}. The robot manipulates the object \(\bar{o}\) ∈ O
+we connect an object ok to a trajectory waypoint if the minimum distance to collision is less than a threshold or if \(o_k\) lies below&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;trajectory 와 object, manipulated object를 정의하고 이들을 연결해 줍니다. 충분히 거리가 가까워지면 edge를 연결해 줍니다. 예시 그림은 아래와 같겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148962075-2a5c2e40-b400-4d3f-aeb7-f8953067ff7e.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;50%&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;우선 전체 scoring function은 다음과 같습니다.&lt;/p&gt;
+&lt;center&gt;
+$$s_{O}\left(x, y ; w_{O}\right)=\sum_{\left(y_{j}, o_{k}\right) \in \mathcal{E}} \sum_{p, q=1}^{M} l_{k}^{p} l^{q}\left[w_{p q} \cdot \phi_{o o}\left(y_{j}, o_{k}\right)\right]$$
+&lt;/center&gt;
+&lt;p&gt;\(l_k^p\)의 경우 k번째 object \(o_k\)의 p번째 특성입니다. 모든 object는 M개의 특성 \([l_k^1,\dots,l_k^M]\)을 가지고 있고, 각 특성은 binary로 나타납니다. 예를 들어서, Laptop은 다음 특성을 가집니다.&lt;/p&gt;
+&lt;center&gt;
+{heavy, fragile, sharp, hot, liquid, electronic} = [0,1,0,0,0,1]
+&lt;/center&gt;
+&lt;p&gt;아주 Náive 하죠?? 어쩔 수 없습니다. DL이 제대로 발전하지 않았거든요!&lt;br /&gt;
+\(l^q\)의 경우 manipulated object인 \(\bar{o}\)의 q번째 특성입니다. 어떤 물체를 옮기느냐에 따라서 주변 물체까지의 거리를 조절해야 하기 때문이죠.&lt;br /&gt;
+\(\phi_{oo}(y_j,o_k)\)의 경우 edge의 feature가 되겠습니다. Minimum x,y,z 거리 + (\(o_k\)가 \(\bar{o}\)와 수직으로 놓여있는지 여부 binary) 로 구성되는 \(\phi_{oo}\in\mathcal{R}^4\)에 속하는 녀석입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+결국 \(\phi_o(x,y)=\sum_{\left(y_{j}, o_{k}\right) \in \mathcal{E}} l_{k}^{u} l^{v}\left[\phi_{o o}\left(y_{j}, o_{k}\right)\right]\)로 표현되겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;trajectory-features&quot;&gt;Trajectory features&lt;/h3&gt;
+&lt;p&gt;Trajectory는 우선 3개로 분할됩니다. (왜 3개인지는 알 수 없음)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148970025-214c5c22-64cc-4ea6-b933-384b57fcb318.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;50%&quot; /&gt;
+그림에서는 1,2,4 이렇게 3개의 waypoint로 분할 된 것이죠. 각 trajectory segment에 대해서 3가지 feature를 각각 적용한 후 concate해서 사용합니다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Robot arm configuration \(\in \mathcal{R}^{27}\)&lt;br /&gt;
+ (\(r,\theta,\phi\)) of wrist and elbow w.r.t shoulder + elbow when the end effector attains maximum state (joint lock이 발생하는 여부를 알려줄 수 있음)&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Orientation  and temporal behavior of the object to be manipulated \(\in \mathcal{R}^{28}\)&lt;br /&gt;
+  -&amp;gt; part we store the cosine of the object’s maximum deviation, along the vertical axis, from its final orientation at the goal location + maximum deviation along the whole trajectory&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Object-environment interactions \(\in \mathcal{R}^{20}\)&lt;br /&gt;
+ (i) minimum vertical distance from the nearest surface below it. (ii) minimum horizontal distance from the surrounding surfaces; and (iii) minimum distance from the table, on which the task is being performed, and (iv) minimum distance from the goal location&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;총 \(\phi_E(\cdot)\in\mathcal{R}^{75}\) 의 trajectory feature를 형성하였습니다. 사실 hand-made feature에는 큰 관심 없으므로 빠르게 넘어가겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;learning-the-scoring-function&quot;&gt;Learning the scoring function&lt;/h3&gt;
+&lt;p&gt;터무니없이 간단한 방식으로 parameter를 학습합니다.
+&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148972396-113e140b-147f-4b1d-99f6-16056cb06cb8.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;50%&quot; /&gt;
+그냥 단순한 Linear update죠? 심지어 random initialize도 아니네요.&lt;/p&gt;
+
+&lt;p&gt;자 그렇다면 이게 어떻게 Regret을 최소화 할 수 있는 걸까요? 저자는 Expected \(\alpha\)-informative feedback을 이용했습니다.&lt;/p&gt;
+
+&lt;center&gt;
+$$E_{t}\left[s^{*}\left(x_{t}, \bar{y}_{t}\right)\right] \geq s^{*}\left(x_{t}, y_{t}\right)+\alpha\left(s^{*}\left(x_{t}, y_{t}^{*}\right)-s^{*}\left(x_{t}, y_{t}\right)\right)-\xi_{t}$$
+&lt;/center&gt;
+&lt;p&gt;에서 적절한 \(\alpha,\xi\)를 골라주면 \(E\left[R E G_{T}\right] \leq \mathcal{O}\left(\frac{1}{\alpha \sqrt{T}}+\frac{1}{\alpha T} \sum_{t=1}^{T} \xi_{t}\right)\)로 bound된다고 합니다. (자세한 내용은 &lt;a href=&quot;https://arxiv.org/pdf/1205.4213.pdf&quot; title=&quot;Regret bound&quot;&gt;참고문헌 Online Structured Prediction via Coactive Learning&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;experiments&quot;&gt;Experiments&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148977450-d26a2a86-0f12-4697-9e7f-1461623dab31.png?style=centerme&quot; alt=&quot;image&quot; /&gt;
+다음과 같은 3가지 task에 대해서 실험을 진행하였습니다.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Manipulator centric : 그냥 물건 옮기기&lt;/li&gt;
+  &lt;li&gt;Environment centric : fragile 물건 옮기기&lt;/li&gt;
+  &lt;li&gt;Human centric : 날카로운 물체를 사람 피해서 옮기기&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Baseline으로는 BiRRT, Manual, Oracle-SVM, MMP-online(maximum margin planning)을 사용하였습니다.&lt;/p&gt;
+
+&lt;h3 id=&quot;evaluation-metric&quot;&gt;Evaluation metric&lt;/h3&gt;
+&lt;p&gt;Human preference를 주려면 뭐가 됐든 숫자로 나타낼 수 있어야 합니다. Likert scale과 nDCG(normalized discounted cumulative gain)이 사용되었는데요.&lt;br /&gt;
+Likert scale은 1-5 (5가 best)로 5지선다를 주는 것입니다.
+nDCG의 경우 순위 추천 알고리즘 등에서 자주 사용되는 것인데, 순위 높은 녀석들을 잘 추천하는 것이 낮은 녀석들을 추천하는 것보다 중요하도록 매겨진 것입니다. 자세한 사항은 다음 블로그에서 잘 설명되어 있습니다. &lt;a href=&quot;https://walwalgabu.tistory.com/entry/4-NDCG-Normalized-Discounted-Cumulative-Gain%ED%8F%89%EA%B0%80%EC%A7%80%ED%91%9C&quot; title=&quot;nDCG&quot;&gt;nDCG 설명 블로그 바로가기&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;results&quot;&gt;Results&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148978523-1399b503-a6e2-4406-ac9e-837a745de15c.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;50%&quot; /&gt;
+우선 모든 task에 대해서 TPP 방식이 가장 높은 점수를 얻었습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148978828-5e835a91-7102-440d-a195-94324e5cc191.png&quot; alt=&quot;image&quot; /&gt;
+새로운 환경과 object들에도 잘 적응하는 것을 볼 수 있습니다. Oracle-SVM이 초반에 높은 성능을 내고는 있지만, 이는 모든 trajectory space를 알아야 하므로 실생활에서 사용하기 어렵다는 단점이 있습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;This algorithm leverages the expert’s labels on trajectories (hence the name Oracle) 
+and is trained using SVM-rank in a batch manner. This algorithm is not realizable in practice, as it requires labeling on the large space of trajectories&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148979499-28d66f8a-2c6c-40a9-b034-ecca89fccbda.png?style=centerme&quot; alt=&quot;image&quot; width=&quot;60%&quot; /&gt;
+User study까지 진행을 하였습니다. HCI 관점에서 바라본 것인데, task가 어려워질 수록 시간과 피드백의 수가 늘어나는 것을 확인할 수 있습니다. 또한 피드백을 줄 수록 user가 더 높은 점수를 주는 것도 확인할 수 있었습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Human preference를 이용하여 Robot manipulator의 trajectory를 잘 선택하는 방식을 연구하였습니다. 사실 trajectory generation이라기보다는 RRT로 형성된 많은 trajectory 중 어떤 것이 제일 나은 것인지를 robot이 판단할 수 있게 하는 논문입니다.&lt;/p&gt;
+
+&lt;p&gt;아쉬운 점은 Hand-desinged feature를 사용했다는 점인데, 추후 논문들에서 개선된 점이 분명 있을 거라고 생각합니다.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 10 Jan 2022 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2022/01/10/PbRL_paper1/</link>
+        <guid isPermaLink="true">http://localhost:4000/2022/01/10/PbRL_paper1/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Paper review - A survey of preference-based reinforcement learning methods</title>
+        <description>&lt;p&gt;2022년 제 블로그의 첫 글이자 첫 논문 리뷰는 A survey of preference-based reinforcement learning methods 부터 시작해 보겠습니다. 처음 Preference-based RL를 알게 된 건 Berkeley에 계시는 Kimin Lee 박사님이 하신 2021년 여름방학에 진행된 SNU Summer AI 강연이었습니다 (강연을 잘하셔서 정말 재밌게 들었습니다. 관심 있으신 분들은 꼭 들어보세요! &lt;a href=&quot;https://www.youtube.com/watch?v=MiwOvaywtew&amp;amp;t=569s&quot; title=&quot;PEBBLE&quot;&gt;SNU summer AI - PEBBLE&lt;/a&gt;).
+리뷰 논문부터 시작해서 한 번 흐름을 살펴보죠.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/147902365-1f6a9a32-b722-43f7-8b64-c2ba0a788e67.png&quot; alt=&quot;image&quot; /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Table of contents&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#preliminaries&quot;&gt;Preliminaries&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#preference-learning&quot;&gt;Preference learning&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#markov-decision-processes-with-preferences-mdpp&quot;&gt;Markov decision processes with preferences (MDPP)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#objective&quot;&gt;Objective&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#pbrl-algorithms&quot;&gt;PbRL algorithms&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#related-problem-settings&quot;&gt;Related problem settings&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#design-principles-of-pbrl&quot;&gt;Design principles of PbRL&lt;/a&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#learning-a-policy&quot;&gt;Learning a policy&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#learning-a-preference-model&quot;&gt;Learning a preference model&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#learning-a-utility-function&quot;&gt;Learning a utility function&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#linear-utility-function&quot;&gt;Linear utility function&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#non-linear-utility-function&quot;&gt;Non-linear utility function&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#the-temporal-credit-assignment-problem&quot;&gt;The temporal credit assignment problem&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#trajectory-preference-elicitation&quot;&gt;Trajectory preference elicitation&lt;/a&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#trajectory-generation&quot;&gt;Trajectory generation&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#preference-query-generation&quot;&gt;Preference query generation&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;p&gt;Preference-based reinforcement learning (PbRL)은 다음과 같은 동기에서 시작되었습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;PbRL have been proposed that can directly learn from an expert’s preferences instead of a hand-designed numeric reward.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Reward 기반으로 학습하는 RL은 알파고를 기점으로 크게 발전되었지만, reward function을 정의함에 있어서 여러 가지 문제점을 노출하고 있습니다. (crucially depends on the prior knowledge that is put into the definition of the reward function) 그 중 가장 큰 부분을 차지하는 4가지 문제점을 살펴보겠습니다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Reward hacking : The agent may maximize the given reward, without performing the intended task. &lt;br /&gt;
+예를 들어 청소기에게 먼지가 없을 때 positive-reward를 주면 먼지를 없애는게 아니라 먼지가 없는 부분만 쳐다보고 있는 겁니다.&lt;/li&gt;
+  &lt;li&gt;Reward shaping : The reward does not only define the goal but also guides the agent to the correct solution. &lt;br /&gt;
+사실 optimal reward function을 모를뿐더라, (실제로 없을 수도 있음) 사람이 design 하다보니 문제가 있죠. 이게 사실 RL의 가장 큰 문제….&lt;/li&gt;
+  &lt;li&gt;Infinite rewards : Some applications require infinite rewards.&lt;br /&gt;
+예를 들어 자율주행 차가 사람을 치는 행동은 절대 하면 안되니 negative infinity reward를 줘야 하는데, 이는 classic RL을 성립시킬 수 없습니다. (RL의 가정 중 finite reward 가 있습니다)&lt;/li&gt;
+  &lt;li&gt;Multi-objective trade-offs : The trade-off may not be explicitly known. &lt;br /&gt;
+reward 간의 trade-off 관계는 제대로 파악하기가 어렵습니다. (자율주행 차의 승차감, 속도, safety 등의 balance를 numerical하게 설정하기는 어렵겠죠)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;
+어쨋든 문제는 agent의 behavior 안에 내재된 행동 동기 (Intrinsic motivation)를 numerical scalar value로 표현하는 것이 어렵다는 것입니다. 이를 해결하기 위해 여러 방법들이 연구되어 왔습니다. Inverse RL 이나 learning with advice 등이 있는데, PbRL은 한가지 측면에서 이들과는 다릅니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;PbRL aims at rendering reinforcement learning applicable to a wider spectrum of tasks and &lt;strong&gt;non-expert users&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;즉 RL에 관해 아무것도 모르는 사람도 preference만 있으면 agent를 학습시킬 수 있게 만드는 것이 PbRL입니다. (일반인도 로봇을 가르칠 수 있는 세상…!!)
+&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;preliminaries&quot;&gt;Preliminaries&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;p&gt;PbRL의 동기를 Introduction에서 알아보았고, 이제는 PbRL을 학습하기 위한 포인트들을 알아보겠습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Preference learning is about inducing predictive preference models from empirical data.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;PbRL은 사용지의 데이터로부터 preferece model을 유추하는데 목적이 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;preference-learning&quot;&gt;Preference learning&lt;/h3&gt;
+&lt;p&gt;그럼 이제 수식을 좀 살펴볼까요? Preference는 아래와 같이 5가지로 나누어 표현됩니다. 일단 무조건 2가지 선택지를 비교하는 걸 가정합니다.
+&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/147896080-d91e785f-b76b-401b-ab08-977a2e0b18c0.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;markov-decision-processes-with-preferences-mdpp&quot;&gt;Markov decision processes with preferences (MDPP)&lt;/h3&gt;
+
+&lt;p&gt;MDPP는 sextuple로 구성됩니다.&lt;/p&gt;
+&lt;center&gt;
+$$(S,A,\mu,\delta,\gamma,\rho)$$  
+&lt;/center&gt;
+&lt;p&gt;\(S,A\)는 state와 action space를 나타내고, \(\mu\)는 initial state distribution, \(\delta\)는 transition probability \(\delta(s&apos;|s,a)\) 를 나타냅니다. \(\gamma\in[0,1]\)는 discount factor겠죠.
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;이제 특이한 건 \(\rho\) 인데요, 이는 probability distribution of preference 입니다. 사람은 언제나 stochasticity가 있기 때문에, 같은 선택지에서도 다른 선택을 할 수 있습니다. 이를 확률로 나타내는 거죠. 
+즉 \(\rho(\tau_1\succ\tau_2)\)라고 하면 \(\tau_1\)을 \(\tau_2\)보다 선호할 확률인 것입니다. strict하게 접근하면 여집합이 성립하는 확률이고요, preference라는게 모호할 수도 있으니 여집합은 성립하지 않을수도 있습니다.&lt;br /&gt;
+이제 데이터 셋을 정의합니다. 모든 trajectory를 모아 놓은 것을 아래와 같이 정의합니다.&lt;/p&gt;
+&lt;center&gt; 
+$$\zeta=\{\zeta_i\}=\{\tau_{i1}\succ\tau_{i2}\}_{i=1\dots N}$$  
+&lt;/center&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;objective&quot;&gt;Objective&lt;/h3&gt;
+
+&lt;p&gt;Objective function을 수식으로 정리하면 아래와 같습니다.&lt;/p&gt;
+&lt;center&gt;
+$$\boldsymbol{\tau}_{1} \succ \boldsymbol{\tau}_{2} \Leftrightarrow \operatorname{Pr}_{\pi}\left(\boldsymbol{\tau}_{1}\right)&amp;gt;\operatorname{Pr}_{\pi}\left(\boldsymbol{\tau}_{2}\right),$$
+&lt;/center&gt;
+&lt;center&gt; 
+$$where\ \ \operatorname{Pr}_{\pi}(\boldsymbol{\tau})=\mu\left(s_{0}\right) \prod_{t=0}^{|\boldsymbol{\tau}|} \pi\left(a_{t} \mid s_{t}\right) \delta\left(s_{t+1} \mid s_{t}, a_{t}\right)$$
+&lt;/center&gt;
+&lt;p&gt;이를 만족하는 \(\pi^*\)를 찾는 것이 목표가 되겠죠.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+근데 이건 preference의 차이가 아주 작을 때(게다가 사용자는 stochasticity까지 있을 때)에는 사용하기가 쉽지 않기 때문에, 조금 트릭을 사용하여 maximization 문제로 바꿔주겠습니다.&lt;/p&gt;
+
+&lt;center&gt;
+$$\boldsymbol{\tau}_{1} \succ \boldsymbol{\tau}_{2} \Leftrightarrow \pi^{*}=\arg \max _{\pi}\left(\operatorname{Pr}_{\pi}\left(\boldsymbol{\tau}_{1}\right)-\operatorname{Pr}_{\pi}\left(\boldsymbol{\tau}_{2}\right)\right)$$
+&lt;/center&gt;
+&lt;p&gt;이제 Deep learning의 전문 분야로 들어왔습니다. 아래의 Loss function을 사용해서 policy를 최적화시키면 된다는 얘기죠.&lt;/p&gt;
+
+&lt;center&gt;
+$$L\left(\pi, \boldsymbol{\tau}_{1} \succ \boldsymbol{\tau}_{2}\right)=-\left(\operatorname{Pr}_{\pi}\left(\boldsymbol{\tau}_{1}\right)-\operatorname{Pr}_{\pi}\left(\boldsymbol{\tau}_{2}\right)\right)$$
+&lt;/center&gt;
+&lt;p&gt;추가적으로, 모든 dataset에 대해서 preference objective를 다 만족해야 하므로 weighted sum을 사용해서 최종 Loss function을 정의합니다.&lt;/p&gt;
+&lt;center&gt;
+$$\mathcal{L}(\pi, \zeta)=\sum_{i=1}^{N} \alpha_{i} L\left(\pi, \zeta_{i}\right)$$
+&lt;/center&gt;
+&lt;p&gt;아주 단순하고 명확한 Loss function이 도출되었습니다. (물론 이제 시작)&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h3 id=&quot;pbrl-algorithms&quot;&gt;PbRL algorithms&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/147902409-25d3600d-d2d0-4bd9-91cd-8a9aa63cfaf9.png&quot; alt=&quot;image&quot; /&gt;
+PbRL의 알고리즘은 크게 3가지로 나뉩니다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;learning a policy computes a policy that tries to maximally comply with the preferences&lt;/li&gt;
+  &lt;li&gt;learning a preference model learns a model for approximating the expert’s preference relation&lt;/li&gt;
+  &lt;li&gt;learning a utility function estimates a numeric function for the expert’s evaluation criterion&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;1번의 경우 direct policy learning, 다시 말해 Deep learning 방식으로 Loss function을 바로 minimization 해서 policy를 얻겠다는 겁니다. 그림에서는 위쪽 루프 (dashed line)가 되겠습니다.&lt;br /&gt;
+2,3번의 경우 preference를 가공해서 사용하겠다는 것입니다. 아래쪽 루프 (dotted line)이 되겠습니다.&lt;br /&gt;
+세가지 방식 모두 학습 이후에 new policy를 통해 sample을 얻고 다시 학습한다는 점에서 on-policy의 모습을 보여주고 있습니다. (처음에 언급한 Kimin Lee 박사님의 PEBBLE 논문에서 off-policy PbRL을 제안하였습니다)&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h3 id=&quot;related-problem-settings&quot;&gt;Related problem settings&lt;/h3&gt;
+
+&lt;p&gt;RL의 문제점을 해결하기 위해 유사한 방법으로 접근한 연구들을 소개합니다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Learning with advice&lt;br /&gt;
+Classic RL + additional constraints(Rule or preference)&lt;/li&gt;
+  &lt;li&gt;Ordinal feedback&lt;br /&gt;
+numeric ranking instead of pairwise preference&lt;/li&gt;
+  &lt;li&gt;IRL&lt;br /&gt;
+Expert demo가 최적의 trajectory라는 아주 강력한 가정. 추가적인 feedback을 얻을 수 없다는 단점(GAIL이 있으니 이제는 가능한 것 같다.)&lt;/li&gt;
+  &lt;li&gt;Unsupervised learning&lt;br /&gt;
+학습할수록 policy가 더욱 &lt;strong&gt;preferable&lt;/strong&gt;해 질 것이라는 강력한 가정.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;전부 이해한 것은 아니지만 PbRL의 목적 중 하나인 non-expert의 interpretability 관점을 지닌 연구는 없음.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;design-principles-of-pbrl&quot;&gt;Design principles of PbRL&lt;/h2&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;이제 PbRL에서 어떤 방식으로 preference feedback을 주는지 알아보겠습니다. 본 논문은 3가지 type을 제안합니다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;action preference&lt;br /&gt;
+같은 state에 대한 두가지 action preference 비교&lt;/li&gt;
+  &lt;li&gt;state preference&lt;br /&gt;
+다른 state에 대해서 각각 최고의 action을 비교&lt;/li&gt;
+  &lt;li&gt;trajectory preference&lt;br /&gt;
+(state, action)으로 구성된 sequential한 trajectory 전체를 비교&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;사실 3번이 1,2를 포함하므로 3번을 가정해도 무방합니다. (single step trajectory로 볼 수 있음) Trajectory preference를 사용할 경우 가장 큰 문제는 &lt;strong&gt;credit assignment&lt;/strong&gt; 입니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Yet, a difficulty with trajectory preferences is that the algorithm needs to determine which states or actions are responsible for the encountered preferences, which is also known as the temporal credit assignment problem&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Objective function을 잘 짜서, trajectory를 비교했을 때 그 안에 어떤 state에서 취한 어떤 action에게 credit을 줄 것인지를 결정해야 한다는 뜻입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;learning-a-policy&quot;&gt;Learning a policy&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Policy distribution&lt;/strong&gt;
+&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/147904787-47d379c6-7168-4880-a5cf-bbb9a84d106f.png&quot; alt=&quot;image&quot; /&gt;
+parameterized policy의 distribution을 구한 뒤 preference dataset에 대한 MAP(maximum-a-posterior)를 통해 최적의 policy를 구하는 방식입니다.&lt;br /&gt;
+특징은 policy distribution에서 2개의 policy를 sampling 하고, 그에 따른 trajectory pair를 buffer에 모아둡니다. 충분히 pair가 쌓인 뒤 expert feedback을 받습니다.&lt;br /&gt;
+이 때 Likelihood function은 아래와 같다고 하는데, &lt;strong&gt;제 생각에는 negative가 붙어야 하지 않나 싶네요&lt;/strong&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;The likelihood is high if the realized trajectories \(\tau^\pi\) of the policy \(\pi\) are closer to preferred trajectory.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;center&gt;
+$$\operatorname{Pr}\left(\boldsymbol{\tau}_{1} \succ \boldsymbol{\tau}_{2} \mid \pi\right)=\Phi\left(\frac{\mathbb{E}\left[d\left(\boldsymbol{\tau}_{1}, \boldsymbol{\tau}^{\pi}\right)\right]-\mathbb{E}\left[d\left(\boldsymbol{\tau}_{2}, \boldsymbol{\tau}^{\pi}\right)\right]}{\sqrt{2} \sigma_{p}}\right)$$
+&lt;/center&gt;
+&lt;p&gt;MAP나 MLE나 결과는 비슷하니까 MLE로 생각하면 직관적으로 이해는 됩니다.&lt;br /&gt;
+&lt;br /&gt;
+이 방식의 문제는 distance function \(d\)가 필요하다는 것인데, Euclidean distance로는 high-dimenison continuous state space는 힘들다고 합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Ranking policy&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/147905228-c23dbfa0-d49e-42a4-bf74-8110cf299d5c.png&quot; alt=&quot;image&quot; /&gt;
+이번에는 policy를 대놓고 비교하는 겁니다. Multi-arm bandit과 비슷한 방식이라고 합니다. 특징은 trajectory rollout 즉시 preference feedback 과정을 거친다는 겁니다.&lt;br /&gt;
+일단 policy set을 잔뜩 준비하고, 비교한 후 EDPS(evolutionary direct policy search)라는 알고리즘을 통해서 더 나은 policy set으로 만들어줍니다.&lt;/p&gt;
+&lt;center&gt;
+$$\operatorname{Pr}\left(\pi_{1} \succ \pi_{2}\right) \approx \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}\left(\boldsymbol{\tau}_{i}^{\pi_{1}} \succ \boldsymbol{\tau}_{i}^{\pi_{2}}\right)$$
+&lt;/center&gt;
+&lt;p&gt;딱봐도 그렇듯이 엄청난 양의 비교가 필요하다는 단점이 있습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;learning-a-preference-model&quot;&gt;Learning a preference model&lt;/h3&gt;
+
+&lt;p&gt;Preference model은 classification 문제를 푸는 것과 같습니다.&lt;/p&gt;
+&lt;center&gt;
+$$C\left(a \succ a^{\prime} \mid s\right)$$
+&lt;/center&gt;
+&lt;p&gt;어떤 state \(s\)에 대해서 두 action의 preference를 알아낼 수 있는 모델이 되겠습니다. &lt;a href=&quot;https://link.springer.com/content/pdf/10.1007/s10994-012-5313-8.pdf&quot; title=&quot;PbRL-preference-model&quot;&gt;Fürnkranz et al(2012)&lt;/a&gt;가 제안한 알고리즘을 살펴보겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/147988972-b8ed892e-59bd-4154-be5c-3059bcb16431.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;line 5를 자세히 보겠습니다. initial state \(s\)에 대해서 모든 action을 다 훑는 것입니다. 그 이후로는 current policy로 trajectory를 형성합니다. 이 데이터를 바탕으로 preference model을 (classification model) 구성하게 되면, greedy policy를 이끌어낼 수 있습니다.&lt;/p&gt;
+&lt;center&gt;
+$$\pi^{*}(a \mid s)= \begin{cases}1 &amp;amp; \text { if } a=\arg \max _{a^{\prime}} k\left(s, a^{\prime}\right) \\ 0 &amp;amp; \text { else }\end{cases},$$  
+$$where\ \ k(s, a)=\sum_{\forall a_{i} \in A(s), a_{j} \neq a} C\left(a_{i} \succ a_{j} \mid s\right)=\sum_{\forall a_{i} \in A(s), a_{j} \neq a} C_{i j}(s)$$
+&lt;/center&gt;
+&lt;p&gt;\(k(s,a)\)의 경우 resulting count라고 하는데, 높을 수록 가장 action set 내에서 preference가 높다고 보면 되겠습니다. 다만 continuous action set에서 어떻게 동작할 수 있을지는 의문입니다.&lt;br /&gt;
+또한 특징으로는 \(C\)를 countinuous function으로 사용할 경우, uncertainty를 얻어낼 수 있어서, exploration에 사용할 수 있다고 합니다. (Discrete이라고 안될 게 뭐지 싶지만 continuous가 더 잘되긴 하겠죠)&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;learning-a-utility-function&quot;&gt;Learning a utility function&lt;/h3&gt;
+
+&lt;p&gt;Utility function은 RL에서 reward와 유사하지만 약간의 차이를 나타냅니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;However, in the PbRL case it is sufficient to find a reward function (=utility function) that induces the same, optimal policy as the true reward function.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Classic RL처럼 고정된 reward의 형태를 나타낼 필요가 없기 때문에 따로 이름을 붙여준 것입니다. 기본적으로는 Scalar utility를 사용하는데요, 아래와 같이 간단히 정의됩니다.&lt;/p&gt;
+&lt;center&gt;
+$$\boldsymbol{\tau}_{i 1} \succ \boldsymbol{\tau}_{i 2} \Leftrightarrow U\left(\boldsymbol{\tau}_{i 1}\right)&amp;gt;U\left(\boldsymbol{\tau}_{i 2}\right)$$
+&lt;/center&gt;
+
+&lt;p&gt;우리는 여기에서 utility를 최대화하는 policy를 선택하기만 하면 됩니다.&lt;/p&gt;
+&lt;center&gt;
+$$\pi^{*}=\max _{\pi} \mathbb{E}_{\operatorname{Pr}_{\pi}(\boldsymbol{\tau})}[U(\boldsymbol{\tau})]$$
+&lt;/center&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/147990022-43a4d7fa-f36c-4abe-a594-420b8715065e.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;알고리즘을 살펴보겠습니다. 우선 모든 trajectory의 initial state는 sampling 된 값이므로, 서로 다른 곳에서 시작하는 trajectories임을 알 수 있습니다. 데이터셋을 만든 후 trajectory pair sampling을 통해서 &lt;strong&gt;utility function을 학습하게 됩니다 (line 12)&lt;/strong&gt;. 그렇다면 utility function의 형태는 어떻게 되는 걸까요?&lt;/p&gt;
+
+&lt;h4 id=&quot;linear-utility-function&quot;&gt;Linear utility function&lt;/h4&gt;
+
+&lt;p&gt;Linear utility function은 다음과 같이 정의될 수 있습니다.&lt;/p&gt;
+&lt;center&gt;
+$$U(\boldsymbol{\tau})=\boldsymbol{\theta}^{T} \boldsymbol{\psi}(\boldsymbol{\tau})$$
+&lt;/center&gt;
+&lt;p&gt;이 때 \(\psi\)는 feature function을 나타냅니다. prior knowledge가 있다면 이미 정의되어 있는 것일테고, DL을 사용하여 이를 추출할 수도 있겠습니다.&lt;br /&gt;
+최종 목표는 당연히 optimal utility function을 parameterize하는 \(\theta\)를 구하는 것입니다.&lt;/p&gt;
+
+&lt;p&gt;Preference를 생각하려면 두 개의 trajectory를 비교해야겠죠. 그 utility 차이를 다음과 같이 정의합니다.&lt;/p&gt;
+&lt;center&gt;
+$$d\left(\boldsymbol{\theta}, \zeta_{i}\right)=\boldsymbol{\theta}^{T}\left(\boldsymbol{\psi}\left(\boldsymbol{\tau}_{i 1}\right)-\boldsymbol{\psi}\left(\boldsymbol{\tau}_{i 2}\right)\right)$$
+&lt;/center&gt;
+&lt;p&gt;우리는 이 차이가 커지도록 만들면 되겠습니다. 그래야 preference를 명확하게 구별해내는 utility function을 찾아낼 수 있을테니까요. 최적화 방법으로는 Loss를 사용하는 방법, 그리고 Log likelihood를 사용하는 방법이 있습니다. 근본적으로 큰 차이는 없습니다만 Loss를 사용하면 최소화, Log likelihood를 사용하면 최대화 문제이브로 function shape이 좌우 대칭 형태가 됩니다. 기존 연구들에서 사용한 방법들인데 크게 중요하지는 않을 것 같습니다. (저는 DL을 쓸거니까요)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148012135-75474499-d4ca-40ea-a2f1-a9966363085c.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://user-images.githubusercontent.com/57203764/148012159-4246e0ab-0f83-4c77-88c2-3b0516f6dfbf.png&quot; alt=&quot;image&quot; /&gt;&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;혹은 이마저도 귀찮다면 그냥 gradient descent를 사용해도 무방합니다. loss function으로 \(y=-x\)를 사용하면 \(\boldsymbol{\theta}_{k+1}=\boldsymbol{\theta}_{k}+\alpha\left(\boldsymbol{\psi}\left(\boldsymbol{\tau}_{k 1}\right)-\boldsymbol{\psi}\left(\boldsymbol{\tau}_{k 2}\right)\right)\)로 구할 수 있습니다.&lt;/p&gt;
+
+&lt;p&gt;이러한 Linear utility function은 간단하지만 다음과 같은 경고를 포함하고 있습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;However, it is &lt;strong&gt;unclear&lt;/strong&gt; how the aggregated utility loss L(θ, ζ) is related to the policy loss L(π, ζ) (see Sec. 2.3), as the policy is subject to the system dynamics whereas the utility is not.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;앞에서 살펴보았던 policy loss의 경우 policy가 실제로 action을 취하는 주체이다보니 system dynamics가 고려되었습니다만, 방금 utility function의 경우 주어진 trajectory에 대해서 단순한 utility 계산만 했죠. 그렇기 때문에 둘 사이의 관계가 &lt;strong&gt;불명확&lt;/strong&gt;하다는 것입니다.&lt;/p&gt;
+
+&lt;h4 id=&quot;non-linear-utility-function&quot;&gt;Non-linear utility function&lt;/h4&gt;
+
+&lt;p&gt;이런 저런 방법이 소개되었는데요, 가장 주목할 점은 DL을 사용하는 방식입니다. 앞에서 소개했던 PEBBLE 논문에서 baseline으로 삼기도 했던 방법입니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1706.03741.pdf&quot; title=&quot;DRL_from_human_preference&quot;&gt;&lt;strong&gt;DRL from human preference - Christiano et al.&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;이 논문도 거쳐가야 하기 때문에, 추후에 따로 다루도록 하겠습니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-temporal-credit-assignment-problem&quot;&gt;The temporal credit assignment problem&lt;/h3&gt;
+
+&lt;p&gt;Classic RL에서도 temporal credit assignment는 커다란 문제였습니다. Policy의 value는 미래의 모든 가능성을 포함하기때문에, 현재 state에서 취하는 action이 얼마나 dominant한 영향을 끼칠지 알기가 어렵습니다. 이를 해결하기 위해서 Advantage를 사용하는 것이 표준적이라고 논문에서 설명하고 있습니다. 그러나 이를 &lt;strong&gt;explicitly&lt;/strong&gt; 해결하기는 어렵습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Yet, if we try to solve the credit assignment problem explicitly, we also require the expert to comply with the Markov property. This assumption can easily be violated if we do not use a full state representation, i.e., if the expert has more knowledge about the state than the policy&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Markov를 가정하기 위해서는 expert가 true state를 알아야 합니다. 하지만 세상의 모든 것이 Hidden Markov model인데 알 방법이 없겠죠.&lt;/p&gt;
+
+&lt;p&gt;Utility를 정의하는 방법은 크게 세가지로 나뉩니다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Value-based utility&lt;br /&gt;
+\(\pi^{*}(a \mid s)=\mathbb{I}\left(a=\underset{a^{\prime}}{\arg \max } \mathbb{E}_{\delta}\left[U\left(s^{\prime}\right) \mid s, a^{\prime}\right]\right)\)
+Transition model을 알 때만 사용 가능함.&lt;/li&gt;
+  &lt;li&gt;Return-based utility&lt;br /&gt;
+\(U(\boldsymbol{\tau})=\boldsymbol{\theta}^{T} \boldsymbol{\psi}(\boldsymbol{\tau})\)
+Reward-based utility로 일반화 가능함.&lt;/li&gt;
+  &lt;li&gt;Reward-based utility
+\(U\left(s_{t}, a_{t}\right)=\boldsymbol{\theta}^{T} \boldsymbol{\varphi}\left(s_{t}, a_{t}\right)\)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;3번의 경우 사실상 reward와 동일한 효과를 내는 것입니다. Preference 기반으로 reward를 알아낸다는 점에서 IRL과 유사한 형태를 띄게 되는 것이죠. 하지만 우리는 trajectory 사이의 preference를 비교할 것이기 때문에 return-based utility를 사용하는 것이나 마찬가지입니다.&lt;/p&gt;
+&lt;center&gt;
+$$U(\boldsymbol{\tau})=\boldsymbol{\theta}^{T} \boldsymbol{\psi}(\boldsymbol{\tau})=\sum_{t=0}^{|\boldsymbol{\tau}|} \gamma^{t} U\left(s_{t}, a_{t}\right)$$
+&lt;/center&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1706.03741.pdf&quot; title=&quot;DRL_from_human_preference&quot;&gt;&lt;strong&gt;DRL from human preference - Christiano et al.&lt;/strong&gt;&lt;/a&gt; 논문에서도 reward-based utility를 사용했습니다만 두 가지 특징이 있었습니다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In contrast to conventional reinforcement learning, a discount factor of γ = 1 is used for U(τ) in all approaches because the expert should not need to consider the effects of decay.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A major problem as all considered trajectories have a finite length.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;사람은 decay가 필요 없으니 안하겠다, 그리고 finite length를 사용할 수 밖에 없었다. 두 가지 모두 명확합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;trajectory-preference-elicitation&quot;&gt;Trajectory preference elicitation&lt;/h3&gt;
+
+&lt;p&gt;그렇다면 trajectory query를 어떻게 구성해야 expert로부터 좋은 feedback을 얻을 수 있을까요? Expert에게 preference를 얻어내는 것은 굉장히 cost가 높은 작업입니다. 자동화가 안되어 있는 작업이니까요. 최대한 적은 query를 사용해야 하는데, 그러면 exploration 문제가 발생해 local optimum에 빠지게 됩니다.&lt;/p&gt;
+
+&lt;h4 id=&quot;trajectory-generation&quot;&gt;Trajectory generation&lt;/h4&gt;
+
+&lt;p&gt;PbRL의 Trajectory는 3가지의 특징을 가져야 합니다.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;In order to be informative, the obtained preferences should be different from existing trajectories. Yet, the trajectories should also be close to optimal in order to obtain useful information. Furthermore, the trajectories need to contain sufficient information about the transition function to compute an optimal policy.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Preference를 구분할 수 있을 정도로 구별되어야 하고&lt;/li&gt;
+  &lt;li&gt;Optimal trajectory에 충분히 가까워야 하며&lt;/li&gt;
+  &lt;li&gt;Transition function에 대한 정보를 충분히 담고 있어야 합니다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Exploration을 충분히 해서 최대한 다양한 종류의 trajectory를 뽑아낸다면 3가지 조건을 만족할 수 있습니다. Preference query는 적게 할 수록 좋지만, trajectory generation 자체는 노동력이 들지 않으니 많으면 많을 수록 좋습니다.&lt;br /&gt;
+Exploration은 undirected, directed, heterogeneous, user-guided exploration으로 나뉩니다. 모든 연구마다 방법이 다르기 때문에, 자세히 설명하지는 않겠습니다만, DRL을 이용하는 경우 stochastic policy를 이용한 undirected exploration을 사용한다고 소개하고 있습니다. SAC 같은 알고리즘을 쓰면 Entropy가 높아지는 방향으로 exploration을 하게 되니까요. &lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;preference-query-generation&quot;&gt;Preference query generation&lt;/h4&gt;
+
+&lt;p&gt;만들어진 trajectory로부터 어떤 query를 추출할 수 있을까요? 마찬가지로 3가지 방식이 있습니다.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;Exhaustive generation : All possible queries (데이터셋 전부 사용)&lt;/li&gt;
+  &lt;li&gt;Greedy generation : Use trajectories generated from the optimized policy (최신의 policy로 만들어낸 trajectory만 사용)&lt;/li&gt;
+  &lt;li&gt;Interleaved generation : Several ways (여러가지 방식)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;높은 utility를 가진 trajectory를 고르기도 하고, ensemble 방식을 사용해 variance가 큰 녀석을 고르기도 하고, 연구마다 다양한 방식이 존재합니다.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;**계속 이어서 작성하는 중입니다..ㅠㅠ **&lt;/p&gt;
+</description>
+        <pubDate>Sat, 01 Jan 2022 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2022/01/01/PbRL_review1/</link>
+        <guid isPermaLink="true">http://localhost:4000/2022/01/01/PbRL_review1/</guid>
+        
+        
+      </item>
+    
   </channel>
 </rss>
