@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Paper writing - How to use proper tense for writing academic paper?
+title: Diary - How to use proper tense for writing academic paper?
 ---
 
 이번에 작성한 논문을 영어 교정을 받아보니, 부끄럽게도 시제에 대한 교정이 잔뜩 있었습니다. 사실 문장별로 어떤 시제를 사용해야 하는지 잘 몰랐습니다. 실제로 말하기 할 때도 시제를 제멋대로 써서 상대방이 못알아 들은 경우도 허다했고요. 하지만 논문은 평생 남는 것이니 정확한 시제를 사용해야겠습니다.  
