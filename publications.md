@@ -5,7 +5,7 @@ title: "Publications"
 #### ( J: journal / C: conference / P: patent )
 <br>
 
-<h2 class="year publication"> 2022 </h2>
+<h2 class="yearbar"> 2022 </h2>
 
 ### [C4] Non-myopic Trajectory Planning for Autonomous Driving Combining Single-Query and Multi-Query Methods
 - **Jae-Kyung Cho**, Sihyeon Jo, Seung-Woo Seo, and Seong-Woo Kim
@@ -16,7 +16,7 @@ title: "Publications"
 - Chan Kim, **Jae-Kyung Cho**, Younghwa Jung, Seung-Woo Seo, and Seong-Woo Kim
 - International Conference on Electronics, Information, and Communication (ICEIC). 2022
 
-<h2 class="year publication"> 2021 </h2>
+<h2 class="yearbar"> 2021 </h2>
 
 ### [C2] A Pilot study of Anomaly Detection Model in Film Stretching Process Using Multivariate Timeseries Data
 - Jae-Young Jang, **Jae-Kyung Cho**, and Seong-Woo Kim

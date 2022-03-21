@@ -3,7 +3,7 @@ img[src$="centerme"] {
     margin: 0 auto;
 }
 
-.year, .publication{
+.yearbar{
 border-top: 2px solid #ccc;
 color: #ccc;
 margin: 4ex 0ex 1ex 0;
