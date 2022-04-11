@@ -11,3 +11,8 @@ On-policy RL methods (TRPO, PPO) are guaranteed of their performance increasing.
 
 I always suffered from this results when I trained SAC and DQN. Now we should add learning rate scheduler or regularizers or much more exploration noise to solve this issue. ([REGULARIZATION MATTERS IN POLICY
 OPTIMIZATION](https://openreview.net/pdf?id=B1lqDertwr)) If you don't do lazy things, just use PPO even if it needs more time to train.
+
+Especially, there is gradient exploding issue when the recurrent networks are used. [Exploding Gradients Problem with RNN](https://neptune.ai/blog/understanding-gradient-clipping-and-how-it-can-fix-exploding-gradients-problem) 
+
+![exploding gradient](https://i0.wp.com/neptune.ai/wp-content/uploads/exploding-gradients.png?resize=513%2C350&ssl=1)
+To solve this issue, we must use L2 normalization (most common answer) and gradient clipping. The next question is "How can we determine the threshold value for gradient clipping?".
