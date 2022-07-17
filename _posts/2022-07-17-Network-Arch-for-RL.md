@@ -18,7 +18,9 @@ UMD에서 하고 있는 연구는 pybullet 엔진으로 구성된 조금 특이�
 </figure>
 
 재미있는 것은 exploration을 위한 stochasticity가 overfitting를 반드시 해결하지도 못한다는 것이다. 단순히 exploration을 잘 해서 data distribution을 늘리면 될 것 같지만 실험 결과는 그렇지 않았다. 그럼 어떻게 해결하느냐고? 이 논문에 나온 문장을 인용하겠다.
-**Those blackbox policies are relatively poorly understood, and they might implicitly acquire certain kind of robustness due to the architectures or the training dynamics**
+
+**"Those blackbox policies are relatively poorly understood, and they might implicitly acquire certain kind of robustness due to the architectures or the training dynamics"**
+
 한마디로 모른다는 것.
 
 그치만 이는 당연하다고 Discussion에서 설명하고 있는데, 꽤나 예시가 마음에 든다. "Backward Brain Bicycle" 는 모든게 거꾸로 된 자전거다. 그니까 오른쪽으로 꺾으면 왼쪽으로 간다. 이건 muscle memory의 일종이라서 사람이 재학습하려면 몇개월이 걸린다고 한다. Biological overfitting이라고 할 수 있다는 것이다. 그런 의미에서 제한된 state distribution만을 경험할 수 있는 강화학습은 필연적으로 overfitting 문제에 직면할 수 밖에 없다. 
