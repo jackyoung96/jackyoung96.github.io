@@ -2,10 +2,22 @@
 layout: page
 title: "Publications"
 ---
-#### ( J: journal / C: conference / P: patent )
+#### ( J: journal / C: conference / P: patent / U: under review)
 <br>
 
 <h2 class="yearbar"> 2022 </h2>
+
+### [J3] Virtual Contents for Children’s Enjoyment and Physical Activity during Remote Physical Education in the Pandemic Era
+- Soohyun Shin, **Jaekyoung Cho**, Kyunghwan Jang, and Seong-Woo Kim
+- Submitted to International Journal of Human–Computer Interaction
+
+### [J2] Blind Spot Detection through Sound
+- **Jae-Kyung Cho**, and Seong-Woo Kim
+- Submitted to IEEE Transactions on Intelligent Transportation Systems
+
+### [J1] UNICON: Uncertainty-Conditioned Policy for Robust Behavior in Unfamiliar Scenarios
+- Chan Kim, **Jae-Kyung Cho**, Hyung-Suk Yoon, Seung-Woo Seo, and Seong-Woo Kim
+- IEEE Robotics and Automation Letters (RA-L) with IROS, 2022
 
 ### [C4] Non-myopic Trajectory Planning for Autonomous Driving Combining Single-Query and Multi-Query Methods
 - **Jae-Kyung Cho**, Sihyeon Jo, Seung-Woo Seo, and Seong-Woo Kim
