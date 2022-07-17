@@ -13,7 +13,7 @@ UMD에서 하고 있는 연구는 pybullet 엔진으로 구성된 조금 특이�
 이 연구에서 사용한 환경은, 환경의 시드에 따라서 +1, -1의 reward가 랜덤하게 주어지게 된다. 같은 시드라면 reward 체계도 같다. 즉 training environment seed와 test environment seed를 분리하면 i.i.d. 조건을 만족시킬 수 있다. 아래 그림과 같이 실제로 너무 적은 episode를 통해 학습할 경우 overfitting이 발생한다. 
 
 <figure>
-<img width="556" alt="image" src="https://user-images.githubusercontent.com/57203764/179384991-5c9829dd-edbf-4b79-ac3b-3ab1bdf6ecd8.png?style=centerme">{:width="70%"}
+<img width="556" alt="image" src="https://user-images.githubusercontent.com/57203764/179384991-5c9829dd-edbf-4b79-ac3b-3ab1bdf6ecd8.png?style=centerme">
 <figcaption>Random maze에서 Overfitting 발생</figcaption>
 </figure>
 

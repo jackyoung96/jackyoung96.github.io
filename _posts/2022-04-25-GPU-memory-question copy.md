@@ -7,11 +7,11 @@ DRL 학습 도중 신기한 현상을 발견했다. 연구실에는 서버가 �
 
 **GPU에 올라간 메모리의 크기가 다르다.**  
 <figure>
-<img width="556" alt="image" src="https://user-images.githubusercontent.com/57203764/165021666-5300eace-7da5-4d64-b7bc-702841119170.png?style=centerme">{:width="70%"}
+<img width="556" alt="image" src="https://user-images.githubusercontent.com/57203764/165021666-5300eace-7da5-4d64-b7bc-702841119170.png?style=centerme">
 <figcaption>서버1의 GPU memory 현황</figcaption>
 </figure>
 <figure>
-<img width="560" alt="image" src="https://user-images.githubusercontent.com/57203764/165021435-197a295c-5c1c-4443-8820-f49cf58fad92.png?style=centerme">{:width="70%"}
+<img width="560" alt="image" src="https://user-images.githubusercontent.com/57203764/165021435-197a295c-5c1c-4443-8820-f49cf58fad92.png?style=centerme">
 <figcaption>서버3의 GPU memory 현황</figcaption>
 </figure>
 
