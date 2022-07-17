@@ -7,11 +7,11 @@ title: "Publications"
 
 <h2 class="yearbar"> 2022 </h2>
 
-### [J3] Virtual Contents for Children’s Enjoyment and Physical Activity during Remote Physical Education in the Pandemic Era
+### [U2] Virtual Contents for Children’s Enjoyment and Physical Activity during Remote Physical Education in the Pandemic Era
 - Soohyun Shin, **Jaekyoung Cho**, Kyunghwan Jang, and Seong-Woo Kim
 - Submitted to International Journal of Human–Computer Interaction
 
-### [J2] Blind Spot Detection through Sound
+### [U1] Blind Spot Detection through Sound
 - **Jae-Kyung Cho**, and Seong-Woo Kim
 - Submitted to IEEE Transactions on Intelligent Transportation Systems
 
