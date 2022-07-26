@@ -23,7 +23,7 @@ title: "Publications"
 ### [C4] Non-myopic Trajectory Planning for Autonomous Driving Combining Single-Query and Multi-Query Methods
 - **Jae-Kyung Cho**, Sihyeon Jo, Seung-Woo Seo, and Seong-Woo Kim
 -  International Conference on Electronics, Information, and Communication (ICEIC). 2022
--  First prize won at Haedong paper award competition of ICEIC 2022
+-  Second prize won at Haedong paper award competition of ICEIC 2022
 -  [link](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9748526&casa_token=THQWUOXAtl4AAAAA:TtWpS2zyXBZTbQhEzBTKCs7t4sT86uEyEV0_tZYVdC3Z42IhHrR-aJ4CdNMgc2DQfI4bOE9WCBA)
 
 ### [C3] Action-Conditioned Traffic Scene Prediction for Interactive Planning
