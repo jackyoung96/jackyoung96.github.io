@@ -55,7 +55,7 @@ Motion planning by RRT* algorithm and Dubins path, and control by pure pursuit a
 
 This is the graduation thesis project for Mechanical engineering departmen, Seoul National University. I designed a holonomic mobile robot by mechanum wheels that operated by ROS. OpenCV library was used to recognize a human size and to estimate distance from the robot. 
 
-<div align="center"><iframe width="400" height="300" src="https://www.youtube.com/watch?v=aWfgVbFIOtg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<div align="center"><iframe width="400" height="300" src="https://www.youtube.com/embed/aWfgVbFIOtg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
 
 ---
 
