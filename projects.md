@@ -25,6 +25,8 @@ title: "projects"
 
 This is an educational program to help children exercise in a pandemic situation. Pose estimation is conducted through the PoseNet and multiple games were designed for encouraging students to exercise.
 
+<div align="center"><iframe width="400" height="300" src="https://www.youtube.com/embed/0psi7gtUd20" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+
 <h2 class="yearbar"> 2020 </h2>
 
 ### Autonomous Golf Car (Jun. 2020 - Jul. 2021)
