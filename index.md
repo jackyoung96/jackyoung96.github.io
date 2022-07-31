@@ -10,4 +10,4 @@ I'm a master's student at the Electrical and Computer Engineering Department, Se
 
 Interest - Reinforcement learning, autonomous vehicle, motion planning, multi-agent system, human computer interaction
 
-Contact: [e-mail](jackyoung96@snu.ac.kr) [linkedin](https://www.linkedin.com/in/jaekyung-cho-7361b521a/) 
+Contact: [e-mail](jackyoung96@snu.ac.kr), [linked-in](https://www.linkedin.com/in/jaekyung-cho-7361b521a/) 
