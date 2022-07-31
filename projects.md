@@ -5,23 +5,39 @@ title: "projects"
 
 <h2 class="yearbar"> 2022 </h2>
 
-### International research internship (Human Resource Development Program for Industrial Innovation)
+### Superhuman level performance across all the multi-agent atari games in PettingZoo (Feb. 2022 - Jun. 2022)
 
+- Teammates - J K Terry (Maintainer of OpenAI Gym), Kevin Corder, Costa Huang, Jaekyung Cho, Eunki Jung
+- Role - code review & troubleshooting (SuperSuit, Stable-baseline3, PettingZoo), Checkpoint on cluster computing for OPtuna
+
+---
+
+### Training a customized performance low-level controller for a quadrotor in a Sim2Real manner (Jan. 2022 - Current)
+
+- International research internship (Human Resource Development Program for Industrial Innovation)
 - University of Maryland, Motion and teaming lab (Dr. Machael Wilson Otte)
 - Fully funded by Korea Institute for Advancement of Technology(KIAT) grant funded by the Korea Government(MOTIE)
+- Teammates - Jaekyung Cho, Chan Kim, Mohamed Khalid, Michael Otte
+- Role - Project leader, Full stack (Hardware, Software) engineer
 
-### Snake game with preference-based reinforcement learning (Jan. 2022 - Feb. 2022)
+---
 
-- Do It Yourself AI (DIYA), KC-ML2
+### Solving snake game with reinforcement learning (Jan. 2022 - Feb. 2022)
+
+- DIYA (Do It Yourself AI), KC-ML2
+- Teammates - Eunki Jung, Jaekyung Cho, Dongjin Lee, Yongsun Lee, Aesop Um
 - Role - Simulator debugging, RL algorithms (QMIX, PbRL) implementation
-
+- [Project overview](https://docs.google.com/presentation/d/1M_l938ZyJV5bdEpczNvSyeSuIt9Xh3pW2PJ94A1_j0o/edit?usp=sharing)
+- [Github link](https://gitlab.diyaml.com/jackyoung96/rlena/-/tree/master)
 
 <h2 class="yearbar"> 2021 </h2>
 
 ### Jumple (Jan. 2021 - Current)
 
 - Autonomous Robot Intelligence Lab (ARIL), SNU
-- Role - Deep learning engineer
+- Teammates - Jaekyung Cho, Soohyun Shin
+- Role - Project leader, deep learning (Pose estimation) engineer, Game developer
+- [Github link](https://github.com/jackyoung96/Jumple)
 
 This is an educational program to help children exercise in a pandemic situation. Pose estimation is conducted through the PoseNet and multiple games were designed for encouraging students to exercise.
 
@@ -29,9 +45,24 @@ This is an educational program to help children exercise in a pandemic situation
 
 <h2 class="yearbar"> 2020 </h2>
 
+### Motion Planning in CARLA Simulator (Aug. 2020 - Mar. 2021)
+
+- Autonomous Robot Intelligence Lab (ARIL), SNU
+- Role - Project leader
+- [paper link](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9748526&casa_token=THQWUOXAtl4AAAAA:TtWpS2zyXBZTbQhEzBTKCs7t4sT86uEyEV0_tZYVdC3Z42IhHrR-aJ4CdNMgc2DQfI4bOE9WCBA)
+
+This is the project that developed a novel hybrid motion planning method for an autonomous vehicle which combines single-query method and multi-query method, and verified in the CARLA simulator
+
+<div align="center"><iframe width="400" height="300" src="https://youtube.com/embed/IlTWotiq8Yo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> 
+<iframe width="400" height="300" src="https://youtube.com/embed/gTCZlKMlQ0c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+---
+
 ### Autonomous Golf Car (Jun. 2020 - Jul. 2021)
 
 - Autonomous Robot Intelligence Lab (ARIL), SNU
+- Teammates - Jaekyung Cho, Chan Kim, Hyosang Ahn
 - Role - Project leader, hardware re-factoring, motion planning and control
 
 This is the project that re-factorizing a golf car to be able to autonomously drive. The steering wheel was controlled by an additional DC motor and the gas pedal was controlled by Arduino with hijacking motor signal. Multiple sensors (16-channels LiDAR, stereo cameras, IMU, GPU, and wheel encoders) were mounted in proper position. All systems were connected using ROS in the main computer (Jetson Xavier)
@@ -43,6 +74,9 @@ This is the project that re-factorizing a golf car to be able to autonomously dr
 ### Autonomous Parking with RRT in Unity3D (Jan. 2020 - Mar. 2020)
 
 - Autonomous Robot Intelligence Lab (ARIL), SNU
+- Personal project
+- Role - Unity environment design, Path planning algorithm implementation
+- [Github link](https://github.com/jackyoung96/Path_Planning_with_RRT)
 
 Motion planning by RRT* algorithm and Dubins path, and control by pure pursuit algorithm. This is my first project in the autonomous vehicle field and ARIL.
 
@@ -53,6 +87,7 @@ Motion planning by RRT* algorithm and Dubins path, and control by pure pursuit a
 ### Human following control of holonomic robot based on vision recognition (Sep. 2019 - Aug. 2020)
 
 - Undergraduate graduation thesis, SNU MAE
+- Personal project
 - Role - Robot design & manufacture, deep learning engineer
 
 This is the graduation thesis project for Mechanical engineering departmen, Seoul National University. I designed a holonomic mobile robot by mechanum wheels that operated by ROS. OpenCV library was used to recognize a human size and to estimate distance from the robot. 
@@ -64,6 +99,7 @@ This is the graduation thesis project for Mechanical engineering departmen, Seou
 ### Autonomous Emergency Braking for Bicycle (Sep. 2019 - Dec. 2019)
 
 - Mechatronics, SNU MAE
+- Teammates - Jaekyung Cho, Seungyoon Cho, Soojin Lee, Chayeon Lee
 - Role - Project leader, deep learning engineer, re-factorizing hardware
 
 This is a driving assistance systems for bicycles. It detects the person in front by Yolo-v3 and gives differential warnings according to the distance. In case of hazardous situation, the automatic brake is operated with the LED warning system.
@@ -75,8 +111,9 @@ This is a driving assistance systems for bicycles. It detects the person in fron
 ### Stair Climbing Robot (Mar. 2019 - June 2019)
 
 - Mechanical Product Design, SNU MAE
+- Teammates - Jaekyung Cho, Hyosang Ahn, Siyung Lee, Jeyoon Bok, Soyoon Bae, Hyerim Do
 - Role - Mechanical engineer, 3D modeling, dynamics analysis
 
-This is the project that Re-factorizing a segway to be able to climb stair. The optimal caterpillar structure was found through 3D modeling and dynamics analysis. 
+This is the project that Re-factorizing a segway to be able to climb stair. The optimal caterpillar tracks structure was found through 3D modeling and dynamics analysis. 
 
 <div align="center"><iframe width="400" height="300" src="https://www.youtube.com/embed/955HN-Y_P0Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
