@@ -7,7 +7,7 @@ title: Home
 
 I'm a master's student at the Electrical and Computer Engineering Department, Seoul National University (SNU), advised by [Seong-Woo Kim](https://aril.snu.ac.kr/) and [Seung-Woo Seo](https://vi.snu.ac.kr:58240/). I hold a BS in Mechanical and Aerospace department from Seoul National University. 
 
-I interned for 7 months in Aerospace Engineering Department from the University of Maryland, advised by [Michael W. Otte](http://ottelab.com/index.html).
+I interned in Aerospace Engineering Department from the University of Maryland, advised by [Michael W. Otte](http://ottelab.com/index.html).
 
 ---
 

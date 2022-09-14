@@ -1,7 +1,7 @@
 # Setup
 title:               Jaekyung Cho
-tagline:             'Robotics engineer'
-description:         'A robotics researcher in SNU ECE.'
+tagline:             'Robotics and deep learning engineer'
+description:         'A robotics and deep learning researcher in SNU ECE.'
 url:                 https://jackyoung96.github.io
 # baseurl:             
 paginate:            5
@@ -30,7 +30,7 @@ remote_theme: poole/lanyon
 # Explanation
 name: 'Jaekyung Cho'
 description: | 
-  Robotics engineer<br>
+  Robotics and deep learning engineer<br>
   Electrical and Computer Engineer, SNU<br>
   Autonomous Robot Intelligence Laboratory
 
