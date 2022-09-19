@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Diary - How to solve discrete-SAC loss explosion problem?
+tags: archive
 ---
 
 One of the most strong advantage of Soft-Actor-Critic (SAC) reinforcement learning method is the robustness about hyperparameters. Almost every cases, this algorithm shows outstanding performance regardless of environment type. Indeed, SAC was proposed for handling continuous action space. We have to modify original SAC for applying in discrete action space environment like Atari games. Followng link shows the detail of discrete SAC.  

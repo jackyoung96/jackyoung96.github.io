@@ -9,5 +9,7 @@ This is a **personal space** where I review papers and organize related document
 <br>
 
 {% for post in site.posts %}
+  {% if post.tags contains "archive" %}
   * {{ post.date | date_to_string }} &raquo; [ {{ post.title }} ]({{ post.url }})
+  {% endif %}
 {% endfor %}

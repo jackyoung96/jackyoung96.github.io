@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Diary - Catastropic performance drop of off-policy RL methods
+tags: archive
 ---
 
 On-policy RL methods (TRPO, PPO) are guaranteed of their performance increasing. Instead, off-policy RL methods (DQN, TD3, SAC) converge much faster because of their sample efficiency. However, I realized that these off-policy RL methods are vernerable by overfitting especially with lack of exploration. 

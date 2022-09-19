@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Diary - Curious about GPU memory
+tags: archive
 ---
 
 DRL 학습 도중 신기한 현상을 발견했다. 연구실에는 서버가 총 3개 있는데, 나는 1번 서버를 주로 사용한다. 이번에 3번째 서버를 사용할 수 있게 되면서, 서버 1에서 돌리던 코드를 그대로 서버 3으로 옮겼는데, GPU에서 신기한 일이 발생했다.  

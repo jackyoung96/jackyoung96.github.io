@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Diary - Network architecture for RL
+tags: archive
 ---
 
 강화학습은 **Reward**라는 **Label**을 사용한다는 점에서 Supervised-learning의 일종으로 분류할 수 있다. Supervised learning에서 가장 주의해야 할 것은 overfitting일 것이다. 이를 해결하기 위해서는 적절한 network architecture (Size, depth, hidden dimension, learning rate, regularizer, etc) 를 찾는 것이 가장 중요하다. 그러나 대다수의 RL 연구들은 약속이나 한 듯 고정된 형태의 네트워크를 사용한다. (2-layer feed forward networks) 물론 시뮬레이션 환경이 OpenAI gym이나 Mujoco로 고정되어 있다보니 당연히 그렇겠지만...

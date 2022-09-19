@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Diary - Sqaushed Gaussian policy for SAC
+tags: archive
 ---
 
 SAC (Soft Actor-Critic) 은 굉장히 유명한 Model-free, stochasitic policy gradient 방식의 RL 알고리즘이다. Stochastic policy의 특성상 완벽하게 Optimal 한 action을 도출하지는 않지만 더 Robust한 action을 도출할 수는 있다.

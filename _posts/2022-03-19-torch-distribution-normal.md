@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Diary - Frequent mistake for using torch.distributions.Normal
+tags: archive
 ---
 
 To implement PPO algorithm with Pytorch, torch.distributions should be used. In case of your action space is continous space, you might use Normal distribution. At that time, **you must check your mean and standard deviation dimension**. 
