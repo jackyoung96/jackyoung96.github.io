@@ -23,7 +23,7 @@ reference: [https://covenant.tistory.com/224](https://covenant.tistory.com/224)
 {% for post in site.posts %}
   {% if post.tags contains "codes" %}
     {% if post.level contains "gold" %}
-      * {{ post.level }} &raquo; [ {{ post.title }} ]({{ post.url }})
+  * {{ post.level }} &raquo; [ {{ post.title }} ]({{ post.url }})
     {% endif %}
   {% endif %}
 {% endfor %}
