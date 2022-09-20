@@ -1,0 +1,51 @@
+N = int(input())
+As = list(map(int, input().split(' ')))
+n_operator = list(map(int, input().split(' ')))
+
+def sign(x):
+    if x == 0:
+        return 1
+    else:
+        return int(x/abs(x))
+
+def get_minmax(As, n_operator):
+    if len(As) == 1:
+        return As[0], As[0]
+
+    maximum = -10**9
+    minimum = 10**9
+    if n_operator[0] != 0:
+        n_operator[0] -= 1
+        _min, _max = get_minmax(As[:-1], n_operator)
+        n_operator[0] += 1
+        _min, _max = _min + As[-1], _max + As[-1]
+        minimum = _min if _min < minimum else minimum
+        maximum = _max if _max > maximum else maximum
+    if n_operator[1] != 0:
+        n_operator[1] -= 1
+        _min, _max = get_minmax(As[:-1], n_operator)
+        n_operator[1] += 1
+        _min, _max = _min - As[-1], _max - As[-1]
+        minimum = _min if _min < minimum else minimum
+        maximum = _max if _max > maximum else maximum
+    if n_operator[2] != 0:
+        n_operator[2] -= 1
+        _min, _max = get_minmax(As[:-1], n_operator)
+        n_operator[2] += 1
+        _min, _max = _min * As[-1], _max * As[-1]
+        minimum = _min if _min < minimum else minimum
+        maximum = _max if _max > maximum else maximum
+    if n_operator[3] != 0:
+        n_operator[3] -= 1
+        _min, _max = get_minmax(As[:-1], n_operator)
+        n_operator[3] += 1
+        # _min, _max = _min // As[-1], _max // As[-1]
+        _min, _max = sign(_min)*(abs(_min)//As[-1]), sign(_max)*(abs(_max)//As[-1])
+        minimum = _min if _min < minimum else minimum
+        maximum = _max if _max > maximum else maximum
+
+    return minimum, maximum
+
+minimum, maximum = get_minmax(As, n_operator)
+print(maximum)
+print(minimum)
