@@ -1,0 +1,20 @@
+N,S = map(int, input().split(' '))
+num_list = list(map(int, input().split(' ')))
+
+if sum(num_list) < S:
+    print(0)
+else:
+    i,j = 0,0
+    cur_sum = 0
+    min_length = int(1e5)
+    while j < N:
+        cur_sum += num_list[j]
+        while cur_sum >= S:
+            min_length = min(j-i+1, min_length)                 
+            if cur_sum - num_list[i] >= S:
+                cur_sum -= num_list[i]
+                i += 1
+            else:
+                break
+        j += 1
+    print(min_length)
