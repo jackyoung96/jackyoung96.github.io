@@ -1,0 +1,57 @@
+import sys
+input = sys.stdin.readline
+
+N = int(input())
+maps = [[0 for _ in range(N)] for _ in range(N)]
+for n1 in range(N):
+    row = input()
+    for n2 in range(N):
+        maps[n1][n2] = int(row[n2])
+
+# BFS
+unvisited = [1 for _ in range(N**2)]
+queue = []
+
+def get_neighbor(i,j,N):
+    neighbors = []
+    if i > 0:
+        neighbors.append((i-1,j))
+    if i < N-1:
+        neighbors.append((i+1,j))
+    if j > 0:
+        neighbors.append((i,j-1))
+    if j < N-1:
+        neighbors.append((i,j+1))
+    return neighbors
+
+house_sizes = []
+count = 0
+prev_search = 0
+while len(queue) or sum(unvisited):
+    if len(queue) == 0: # find unvisited house
+        if count != 0:
+            house_sizes.append(count)
+        count = 0
+        for i in range(prev_search, N**2):
+            if unvisited[i] == 1:
+                unvisited[i] = 0
+                if maps[i//N][i%N] != 0:
+                    queue.append((i//N, i%N))
+                    prev_search = i+1
+                    break
+    else:
+        house = queue.pop(0)
+        count += 1
+        neighbors = get_neighbor(*house, N)
+        for i,j in neighbors:
+            if unvisited[i*N+j] != 0:
+                unvisited[i*N+j] = 0
+                if maps[i][j] == 1:
+                    queue.append((i,j))
+if count != 0:
+    house_sizes.append(count)
+
+print(len(house_sizes))
+house_sizes = sorted(house_sizes)
+for s in house_sizes:
+    print(s)

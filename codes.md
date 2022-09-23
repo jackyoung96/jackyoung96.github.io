@@ -19,7 +19,7 @@ references:
 {% for post in site.posts %}
   {% if post.tags contains "codes" %}
     {% if post.star %}
-  * {{ post.level }} &raquo; [ {{ post.title }} ]({{ post.url }})
+  * {{ post.star }} &raquo; [ {{ post.title }} ]({{ post.url }})
     {% endif %}
   {% endif %}
 {% endfor %}
