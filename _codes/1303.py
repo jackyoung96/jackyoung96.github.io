@@ -1,0 +1,42 @@
+import sys
+input = sys.stdin.readline
+
+N,M = map(int, input().split())
+
+# build map
+maps = [[] for _ in range(M)]
+for m in range(M):
+    row = input().strip()
+    for r in row:
+        maps[m].append(r)
+
+visit = [[0 for _ in range(N)] for _ in range(M)]
+
+def dfs(i,j, M):
+    global visit
+    result = 1
+    visit[i][j] = 1
+    if i > 0:
+        if visit[i-1][j] == 0 and M[i][j]==M[i-1][j]:
+            result += dfs(i-1,j,M)
+    if i < len(M)-1:
+        if visit[i+1][j] == 0 and M[i][j]==M[i+1][j]:
+            result += dfs(i+1,j,M)
+    if j > 0:
+        if visit[i][j-1] == 0 and M[i][j]==M[i][j-1]:
+            result += dfs(i,j-1,M)
+    if j < len(M[0])-1:
+        if visit[i][j+1] == 0 and M[i][j]==M[i][j+1]:
+            result += dfs(i,j+1,M)
+    return result
+
+blue, white = 0,0
+for i in range(M):
+    for j in range(N):
+        if visit[i][j] == 0:
+            if maps[i][j] == 'B':
+                blue += dfs(i,j,maps) ** 2
+            else:
+                white += dfs(i,j,maps) ** 2
+
+print(white, blue)

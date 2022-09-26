@@ -1,7 +1,6 @@
 # Setup
-title:               Jaekyung Cho
+title:               Jae-Kyung Cho
 tagline:             'Robotics and deep learning engineer'
-description:         'A robotics and deep learning researcher in SNU ECE.'
 url:                 https://jackyoung96.github.io
 # baseurl:             
 paginate:            5
@@ -9,7 +8,7 @@ permalink:           pretty
 
 # About/contact
 author:
-  name:              Jaekyung Cho
+  name:              Jae-Kyung Cho
   url:               https://jackyoung96.github.io
   email:             jackyoung96@snu.ac.kr
 
@@ -28,7 +27,7 @@ google_analytics_id: #UA-XXXX-Y
 remote_theme: poole/lanyon
 
 # Explanation
-name: 'Jaekyung Cho'
+name: 'Jae-Kyung Cho'
 description: | 
   Robotics and deep learning engineer<br>
   Electrical and Computer Engineer, SNU<br>
