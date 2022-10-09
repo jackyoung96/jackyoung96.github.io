@@ -26,3 +26,35 @@ font-size: 130%;
 .utterances{
     float: center;
 }
+
+summary::-webkit-details-marker {
+    font-size: 25px;
+    margin-right: 30px;
+}
+details[open] summary::-webkit-details-marker {
+    font-size: 25px;
+    margin-right: 30px;
+}
+
+summary {
+    cursor: pointer;
+    font-size: 20px;
+}
+summary.reference {
+    font-size: 18px;
+}
+summary.difficult {
+    color: #ff0000;
+}
+summary.platinum {
+    color: #b9f2ff;
+}
+summary.gold {
+    color: #ffd700;
+}
+summary.silver {
+    color: #C0C0C0;
+}
+summary.bronze {
+    color: #CD7F32;
+}
