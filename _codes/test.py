@@ -1,42 +1,47 @@
-gears = [[int(c) for c in input().strip()] for _ in range(4)]
+from collections import deque
+import sys
+input = sys.stdin.readline
 
-class Gear:
-    def __init__(self, gears):
-        self.status = gears # 2,6 index: right, left, # N극-0, S극-1
-        self.heads = [0,0,0,0]
-    
-    def rot(self, i, dirs):
-        # i번째 톱니바퀴 dirs 방향으로 회전
-        self.heads[i] = (self.heads[i] - dirs) % 8
-    
-    def turn(self,i,dirs):
-        # start from i
-        turns = [[i,dirs]]
-        for left,right in zip(range(i,3),range(i+1,4)):
-            if self.status[left][(self.heads[left]+2)%8] != self.status[right][(self.heads[right]-2)%8]:
-                turns.append([right,dirs*(-1)**(right-i)])
-            else:
-                break
-        for left,right in zip(reversed(range(i)),reversed(range(1,i+1))):
-            if self.status[left][(self.heads[left]+2)%8] != self.status[right][(self.heads[right]-2)%8]:
-                turns.append([left,dirs*(-1)**(i-left)])
-            else:
-                break
-        for j,d in turns:
-            self.rot(j,d)
-    
-    def print(self):
-        result = 0
-        for i in range(4):
-            result += (2**i) * self.status[i][self.heads[i]]
-        print(result)
+N,M,K = map(int,input().split())
+A = [list(map(int,input().split())) for _ in range(N)]
+trees = [list(map(int,input().split())) for _ in range(M)]
 
-gear = Gear(gears)
-K = int(input())
-turns = []
+tree_dict = [[deque() for _ in range(N)] for _ in range(N)]
+for x,y,age in trees:
+    tree_dict[x-1][y-1].append(age)
+trees = tree_dict
+feed = [[5]*N for _ in range(N)]
+
 for _ in range(K):
-    i,dirs = list(map(int,input().split()))
-    turns.append([i-1,dirs])
-for i,dirs in turns:
-    gear.turn(i,dirs)
-gear.print()
+    for x in range(N):
+        for y in range(N):
+            tree_list = trees[x][y]
+            new_list = deque()
+            while len(tree_list):
+                age = tree_list.popleft()
+                if feed[x][y] >= age:
+                    feed[x][y] -= age
+                    new_list.append(age+1)
+                else:
+                    tree_list.append(age)
+                    break
+            feed[x][y] += sum([a//2 for a in tree_list])
+            trees[x][y] = new_list
+
+    for x in range(N):
+        for y in range(N):
+            for age in trees[x][y]:
+                if age%5 == 0:
+                    for nx,ny in [[x-1,y-1],[x-1,y],[x-1,y+1],[x,y-1],[x,y+1],[x+1,y-1],[x+1,y],[x+1,y+1]]:
+                        if 0<=nx<N and 0<=ny<N:
+                            trees[nx][ny].appendleft(1)
+    
+    for i in range(N):
+        for j in range(N):
+            feed[i][j] += A[i][j]
+
+result = 0
+for x in range(N):
+    for y in range(N):
+        result += len(trees[x][y])
+print(result)
