@@ -1,115 +1,70 @@
-N,K = map(int,input().split())
-pots = list(map(int,input().split()))
+xs = [-1,-1,0,1,1,1,0,-1]
+ys = [0,-1,-1,-1,0,1,1,1]
 
-debug = False
+board = [[] for _ in range(4)]
+fish_dict = {}
+for i in range(4):
+    fishes = list(map(int,input().split()))
+    for j in range(4):
+        board[i].append([fishes[2*j],fishes[2*j+1]-1])
+        fish_dict[fishes[2*j]] = [i,j]
 
-# spiral
-width = 1
-height = 1
-remain = N-1
-while remain >= height:
-    remain -= height
-    if width == height:
-        height += 1
-    else:
-        width += 1
+score = board[0][0][0]
+fish_dict[board[0][0][0]] = [-1,-1]
+board[0][0][0] = 17 # shark
+fish_dict[17] = [0,0]
 
-board1 = [[0]*width for _ in range(height)]
-dirs = [[-1,0],[0,1],[1,0],[0,-1]]
-
-turns = 0
-while True:
-    # 최소에 1 추가
-    min_fish = min(pots)
-    for i in range(len(pots)):
-        if pots[i] == min_fish:
-            pots[i] += 1
-
-    # 첫 번째 배열
-    board1 = [[0]*height for _ in range(width)]
-    x,y = width-1,0
-    head = 0
-    for fish in reversed(pots[:N-remain]):
-        board1[x][y] = fish
-        dx,dy = dirs[head]
-        if not (0<=x+dx<width and 0<=y+dy<height) or board1[x+dx][y+dy]!=0:
-            head = (head+1)%4
-            dx,dy = dirs[head]
-        x,y = x+dx, y+dy
-
-    if debug:
-        print('board1')
-        print(*board1, sep='\n')
+def move_fishes(fish_dict, board):
+    for f_idx in range(1,17):
+        if fish_dict[f_idx][0]==-1:
+            continue
         
-    # 첫 번째 정리
-    new_board1 = [[0]*height for _ in range(width)]
-    new_remain1 = [0]*(remain+1)
-    for i in range(width):
-        for j in range(height):
-            dir_list = []
-            if i!=width-1:
-                dir_list.append([1,0])
-            if j!=height-1:
-                dir_list.append([0,1])
-            for di,dj in dir_list:
-                d = board1[i][j]-board1[i+di][j+dj]
-                d = abs(d)//5 if d>=0 else -(abs(d)//5)
-                new_board1[i][j] -= d
-                new_board1[i+di][j+dj] += d
-    for i in range(remain):
-        d = pots[-remain-1+i]-pots[-remain+i]
-        d = abs(d)//5 if d>=0 else -(abs(d)//5)
-        new_remain1[i] -= d
-        new_remain1[i+1] += d
-    
-    if debug:
-        print('board1 - after')
-        print(*board1, sep='\n')
-    
-    # 숫자 정리
-    for i in range(width):
-        for j in range(height):
-            board1[i][j] += new_board1[i][j]
-            pots[i*height+j] = board1[i][j]
-    board1[-1][0] += new_remain1[0]
-    pots[(width-1)*height] = board1[-1][0]
-    for i in range(remain):
-        pots[i-remain] += new_remain1[i+1]
+        x,y = fish_dict[f_idx]
+        head = board[x][y][1]
+        for _ in range(8):
+            dx,dy = xs[head], ys[head]
+            if 0<=x+dx<4 and 0<=y+dy<4 and board[x+dx][y+dy][0]!=17:
+                nx,ny = x+dx, y+dy
+                if board[nx][ny][0] != 0:
+                    board[x][y] = [board[nx][ny][0], board[nx][ny][1]]
+                    fish_dict[board[x][y][0]] = [x,y]
+                else:
+                    board[x][y] = [0,0]
+                board[nx][ny] = [f_idx,head]
+                fish_dict[f_idx] = [nx,ny]
 
-    if debug:
-        print("first", pots)
+                break
+            head = (head + 1) % 8
+        # print('------------')
+        # print(*board,sep='\n')
     
-    # 두 번째 배열
-    board2 = [[0]*(N//4) for _ in range(4)]
-    board2[0] = pots[N//2+N//4-1:N//2-1:-1]
-    board2[1] = pots[N//4:N//2]
-    board2[2] = pots[N//4-1::-1]
-    board2[3] = pots[N//2+N//4:]
+    # print('------------')
+    # print(*board,sep='\n')
 
-    # 두 번째 정리
-    new_board2 = [[0]*(N//4) for _ in range(4)]
-    for i in range(4):
-        for j in range(N//4):
-            dir_list = []
-            if i!=3:
-                dir_list.append([1,0])
-            if j!=N//4-1:
-                dir_list.append([0,1])
-            for di,dj in dir_list:
-                d = board2[i][j]-board2[i+di][j+dj]
-                d = abs(d)//5 if d>=0 else -(abs(d)//5)
-                new_board2[i][j] -= d
-                new_board2[i+di][j+dj] += d
-    
-    # 숫자 정리
-    for i in range(4):
-        for j in range(N//4):
-            pots[4*j+(3-i)] = board2[i][j] + new_board2[i][j]
+def dfs(fish_dict, board, score):
+    move_fishes(fish_dict, board)
 
-    if debug:
-        print("second", pots)
+    x,y = fish_dict[17]
+    head = board[x][y][1]
+    dx, dy = xs[head], ys[head]
+    n = 1
+    scores = []
+    while 0<=x+n*dx<4 and 0<=y+n*dy<4:
+        nx,ny = x+n*dx, y+n*dy
+        if board[nx][ny][0] != 0 and board[nx][ny][0] != 17:
+            new_fish_dict = {k:v for k,v in fish_dict.items()}
+            new_board = [[i for i in line] for line in board]
+            fish = new_board[nx][ny][0]
+            new_fish_dict[fish]=[-1,-1]
+            new_board[nx][ny][0] = 17
+            new_board[x][y] = [0,0]
+            new_fish_dict[17] = [nx,ny]
+            scores.append(dfs(new_fish_dict, new_board, score+fish))
+        n += 1
     
-    turns += 1
-    if max(pots) - min(pots) <= K:
-        print(turns)
-        exit()
+    if len(scores)==0:
+        return score
+    else:
+        return max(scores)
+    
+print(dfs(fish_dict, board, score))
