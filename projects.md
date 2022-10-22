@@ -3,6 +3,8 @@ layout: page
 title: "projects"
 ---
 
+[Korean projects portfolio link](https://jackyoung96.notion.site/ad0f024527934ab3b2915b25486712f2)
+
 <h2 class="yearbar"> 2022 </h2>
 
 ### Superhuman level performance across all the multi-agent atari games in PettingZoo (Feb. 2022 - Jun. 2022)
