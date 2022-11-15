@@ -15,4 +15,11 @@ ENV LC_ALL ko_KR.UTF-8
 ENV PYTHONIOENCODING=utf-8
 ```
 
+혹은  
+
+```dockerfile
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+```
+
 출처 [dockerfile 한국어 로케일 설정(feat. 우분투와 데비안의 차이)](https://blog.metafor.kr/235)
