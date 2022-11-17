@@ -58,3 +58,24 @@ summary.silver {
 summary.bronze {
     color: #CD7F32;
 }
+
+#search-bar {
+    margin: 32px auto;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 0 20px;
+}
+
+#search-bar #search-input {
+    width: calc(100% - 30px);
+    border: none;
+    line-height: 44px;
+    outline: none;
+    border-style: none;
+}
+
+li.search {
+    list-style:none;
+    padding-bottom:10px;
+    list-style-type:square;
+}
