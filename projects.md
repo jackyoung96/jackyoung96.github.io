@@ -3,7 +3,7 @@ layout: page
 title: "projects"
 ---
 
-[Korean projects portfolio link](https://jackyoung96.notion.site/ad0f024527934ab3b2915b25486712f2)
+[Go to Korean ver.](https://jackyoung96.notion.site/ad0f024527934ab3b2915b25486712f2)
 
 <h2 class="yearbar"> 2022 </h2>
 
