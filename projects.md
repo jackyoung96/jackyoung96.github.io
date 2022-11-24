@@ -22,6 +22,8 @@ title: "projects"
 - Teammates - Jaekyung Cho, Chan Kim, Mohamed Khalid, Michael Otte
 - Role - Project leader, Full stack (Hardware, Software) engineer
 
+<div align="center"><iframe width="400" height="300" src="https://www.youtube.com/embed/FLPYOGI_PkE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+
 <h2 class="yearbar"> 2021 </h2>
 
 ### Blind spot detection through sound (Jul. 2021 - Current)
@@ -41,6 +43,8 @@ This is the project to detect the position of occluded vehicles by walls on narr
 - Role - Simulator debugging, RL algorithms (QMIX, PbRL) implementation
 - [Project overview](https://docs.google.com/presentation/d/1M_l938ZyJV5bdEpczNvSyeSuIt9Xh3pW2PJ94A1_j0o/edit?usp=sharing)
 - [Github link](https://gitlab.diyaml.com/jackyoung96/rlena/-/tree/master)
+
+---
 
 ### Jumple (Jan. 2021 - Current)
 
@@ -72,12 +76,13 @@ This is the project that developed a novel hybrid motion planning method for an 
 ### Autonomous Golf Car (Jun. 2020 - Jul. 2021)
 
 - Autonomous Robot Intelligence Lab (ARIL), SNU
-- Teammates - Jaekyung Cho, Chan Kim, Hyosang Ahn
+- Teammates - Jaekyung Cho, Chan Kim, Donghwi Jung, Hyosang Ahn
 - Role - Project leader, hardware re-factoring, motion planning and control
 
 This is the project that re-factorizing a golf car to be able to autonomously drive. The steering wheel was controlled by an additional DC motor and the gas pedal was controlled by Arduino with hijacking motor signal. Multiple sensors (16-channels LiDAR, stereo cameras, IMU, GPU, and wheel encoders) were mounted in proper position. All systems were connected using ROS in the main computer (Jetson Xavier)
 
-<div align="center"><iframe width="400" height="300" src="https://www.youtube.com/embed/YZAXXUBaxG8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+<div align="center"><iframe width="400" height="300" src="https://www.youtube.com/embed/YZAXXUBaxG8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="400" height="300" src="https://www.youtube.com/embed/24TYn6nvWzY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
 
 ---
 
