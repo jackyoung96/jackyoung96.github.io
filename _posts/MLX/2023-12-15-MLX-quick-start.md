@@ -74,11 +74,6 @@ np.array(c) # 연산이 수행
 ```
 
     array([2, 4, 6, 8], dtype=float32)
-
-
-
-
-
     array([2., 4., 6., 8.], dtype=float32)
 
 
