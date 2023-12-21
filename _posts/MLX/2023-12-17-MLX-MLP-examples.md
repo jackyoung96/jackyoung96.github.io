@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "MLX: Apple silicon 용 Machine Learning 프레임워크 - 02.Multi-Layer Perceptron example"
+title: "MLX: Apple silicon 용 Machine Learning 프레임워크 - 03.Multi-Layer Perceptron example"
 tags: archive
 ---
 
