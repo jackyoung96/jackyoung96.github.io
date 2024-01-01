@@ -1,6 +1,6 @@
 # Setup
 title:               Jae-Kyung Cho
-tagline:             'Robotics and deep learning engineer'
+tagline:             'LLM Developers who was a Robotics engineer'
 url:                 https://jackyoung96.github.io
 # baseurl:             
 paginate:            5
@@ -29,8 +29,7 @@ remote_theme: poole/lanyon
 # Explanation
 name: 'Jae-Kyung Cho'
 description: | 
-  Robotics and deep learning engineer<br>
-  SK Telecom<br>
+  LLM developer in SK Telecom<br>
   M.S. of Electrical and Computer Engineer, SNU
 
 github:
