@@ -12,7 +12,7 @@ tags: archive
 
 따라서 RL 을 사용하지 않고 학습 안정성을 높이는 여러 방법론들이 등장했고, 이들을 **DAP (Direct Alignment from Preference)** 라고 부릅니다. 이번 포스팅 3부작의 Part 2에서는 DAP 방법론들에 대해서 알아보도록 하겠습니다.
 
-## Model alignment - DAP
+# Model alignment - DAP
 
 ## SLiC-HF (Deepmind)
 
