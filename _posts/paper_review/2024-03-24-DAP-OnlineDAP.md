@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Direct Alignment from Preferences Part 03. Online DAP
+title: Direct Alignment from Preferences - Part 03. Online DAP
 tags: archive
 ---
 
