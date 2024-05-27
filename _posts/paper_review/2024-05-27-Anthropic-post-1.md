@@ -50,7 +50,7 @@ Many unclear active neuron 대신 few active features 의 dictionary 를 만들�
 - 특정 feature 를 일부러 강화하면 해당 feature 와 유사한 답변이 생성되는 것을 실험적으로 확인하였다. 이는 in-context learning 등이 특정 feature 를 강화시켜서 해당 내용과 연관된 답변을 하는 것을 설명할 수 있다. **LLM 은 feature 를 통해서 world representation 을 이해하고 있다!**
 - 특정 Input/Output 이 어떤 feature 와 가까운지 알 수 있기 때문에 **LLM 을 더 safe 하게 만들 수 있다.**
 
-### Anthropic 의 dictionary features
+### P.S. Anthropic 의 dictionary features
 
 [https://transformer-circuits.pub/2023/monosemantic-features/vis/index.html](https://transformer-circuits.pub/2023/monosemantic-features/vis/index.html)
 
