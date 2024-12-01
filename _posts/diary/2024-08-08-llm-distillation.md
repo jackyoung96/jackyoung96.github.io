@@ -71,6 +71,7 @@ yi-1.5-34b-chat
 mixtral-8x22b-instruct-v0.1  
 phi-3-small-8k-instruct  
 
+
 ## 시사점
 
 이게 대체 어떻게 된 일일까? (적어도 가장 유명한 18개 모델에서 동일한 답변이 나왔다)
@@ -93,3 +94,20 @@ Qwen 시리즈에서 나온 그래프 시리즈가 아닌가!!!
 ### Root model 은?
 
 만약 가능성 2번이 사실이라면 root model 은 대체 뭘까? Root model 이 만약에 chatGPT 라면 암암리에 수행했던 gpt distillation 이 사실로 드러나는 건 아닐까나...
+
+
+## 모델들 결과
+
+모델들 결과
+<img width="1531" alt="스크린샷 2024-08-08 오전 10 33 01" src="https://github.com/user-attachments/assets/5c0bbccb-0e52-45e2-9f58-89a4f8494145">
+<img width="1530" alt="스크린샷 2024-08-08 오전 10 31 19" src="https://github.com/user-attachments/assets/a02322f7-a519-4329-9c96-909e0e241890">
+<img width="1530" alt="스크린샷 2024-08-08 오전 10 26 22" src="https://github.com/user-attachments/assets/e787b9e4-35cb-4bd5-851f-2909731a3ba2">
+<img width="1532" alt="스크린샷 2024-08-08 오전 10 25 09" src="https://github.com/user-attachments/assets/ab3f6e19-a0d6-4069-87df-99c1efbbcb0f">
+<img width="1530" alt="스크린샷 2024-08-08 오전 10 21 57" src="https://github.com/user-attachments/assets/fc1211a0-e9a3-433e-9aff-acb18625d81f">
+<img width="1532" alt="스크린샷 2024-08-08 오전 10 19 43" src="https://github.com/user-attachments/assets/7f258a3c-c1aa-4dba-9adb-a65499ed7f85">
+<img width="1530" alt="스크린샷 2024-08-08 오전 10 18 39" src="https://github.com/user-attachments/assets/bbc0a879-f9ef-48a7-b6c9-48eaecdad623">
+<img width="1527" alt="스크린샷 2024-08-08 오전 10 18 00" src="https://github.com/user-attachments/assets/c180b8a6-f4b5-4af1-8524-e6d38491f5fb">
+<img width="1528" alt="스크린샷 2024-08-08 오전 10 15 33" src="https://github.com/user-attachments/assets/a7a96e3e-3084-413c-8221-de8206319ac6">
+<img width="1530" alt="스크린샷 2024-08-08 오전 10 14 34" src="https://github.com/user-attachments/assets/082fe8c7-60ff-4771-8089-05eb1e3cf355">
+<img width="1530" alt="스크린샷 2024-08-08 오전 10 13 39" src="https://github.com/user-attachments/assets/aed9da07-1e7a-4fc1-ad5b-456a7fe67594">
+<img width="1527" alt="스크린샷 2024-08-08 오전 10 12 29" src="https://github.com/user-attachments/assets/e5967a66-8342-4612-9980-6d6d415033c8">
