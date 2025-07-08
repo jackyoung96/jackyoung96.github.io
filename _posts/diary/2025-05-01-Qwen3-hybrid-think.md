@@ -134,9 +134,8 @@ text = tokenizer.apply_chat_template(
 과연 `enable_thinking=True` 옵션을 주면 무엇이 달라지는 것일까? `tokenizer_config.json` 을 보면 Qwen3 의 chat_template 이 있다. 여기서 해당 옵션을 통해 달라지는 부분을 확인할 수 있다.
 
 ```
-{%- if enable_thinking is defined and enable_thinking is false %}
-    {{- '<think>\\n\\n</think>\\n\\n' }}
-{%- endif %}
+if enable_thinking is defined and enable_thinking is false
+    '<think>\\n\\n</think>\\n\\n'
 ```
 
 즉 enable_thinking 이 false 인 경우 \<think\>\</think\> reasoning 이 없는 reasoning 파트를 assistant indicator 뒤에 강제로 붙여 넣어서, reasoning 이 없는 답변을 생성하는 것이다. 이는 reasoning 이 assistant indicator 바로 뒤부터 시작한다는 점을 활용한 것인데, 개인적으로 굉장히 스마트한 방법이라고 생각한다.
