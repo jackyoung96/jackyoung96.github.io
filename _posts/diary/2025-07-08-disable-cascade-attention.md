@@ -34,12 +34,12 @@ Cascade attention 의 핵심은 Multi query 가 들어온 경우 겹치는 부�
 
 이렇게 함으로써 얻는 이점은 2개인데, 우선 당연하게도 shared KV-Cache 를 N배 적게 사용하니까 메모리 이득이 발생한다는 점, 그리고 작아진 shared KV-Cache 를 L2 Cache 가 아닌 SMEM/Register 에 올려둠으로써 엑세스 속도를 훨씬 빠르게 가져갈 수 있다는 점이다. 
 
-Devide-and-conquer 를 통해 중복되는 메모리를 줄이고, 추론속도를 향상시킨 알고리즘이라 볼 수 있겠다. 당연하게도, 결과에는 영향을 주면 안된다 (이론적으론)
+Divide-and-conquer 를 통해 중복되는 메모리를 줄이고, 추론속도를 향상시킨 알고리즘이라 볼 수 있겠다. 당연하게도, 결과에는 영향을 주면 안된다 (이론적으론)
 
 ### 이게 왜 발생?
 
 웃긴건 H100 에서는 해당 버그가 발생하지 않는데 A100 GPU 에서만 버그가 발생한다.  
-Tensor-parallel 도 결국은 devide-and-conquer 를 하는거고, cascade attention 도 마찬가지다.  
+Tensor-parallel 도 결국은 divide-and-conquer 를 하는거고, cascade attention 도 마찬가지다.  
 두 개를 동시에 하려다가 뭔가 연산이 꼬이는 것 같은데... 아주 심각한 버그라고 볼 수 있다.  
 그리고 이 문제를 처음 발견한 이유가, 이번에 벤치마크 돌린 모델이 system message 가 꽤나 길게 박혀있는 모델이기 때문이다. (shared prompt prefix 가 길다는 것! cascade attention 이 반드시 activate 된다.) 
 
