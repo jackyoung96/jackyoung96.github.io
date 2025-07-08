@@ -43,7 +43,7 @@ Tensor-parallel 도 결국은 divide-and-conquer 를 하는거고, cascade atten
 두 개를 동시에 하려다가 뭔가 연산이 꼬이는 것 같은데... 아주 심각한 버그라고 볼 수 있다.  
 그리고 이 문제를 처음 발견한 이유가, 이번에 벤치마크 돌린 모델이 system message 가 꽤나 길게 박혀있는 모델이기 때문이다. (shared prompt prefix 가 길다는 것! cascade attention 이 반드시 activate 된다.) 
 
-실제로 `disable_cascade_attn` 옵션 document 를 보면
+실제로 [`disable_cascade_attn` 옵션에 대한 공식 문서](https://docs.vllm.ai/en/stable/api/vllm/config.html#vllm.config.ModelConfig.disable_cascade_attn)를 보면
 > Disable cascade attention for V1. While cascade attention does not change the mathematical correctness, disabling it could be useful for preventing potential numerical issues. Note that even if this is set to False, cascade attention will be only used when the heuristic tells that it's beneficial.
 
 라고 되어 있다. ~~아니 이러면 당연히 default 를 True 로 해놔야 하는거 아니야??~~
