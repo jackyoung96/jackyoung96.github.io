@@ -28,7 +28,7 @@ https://github.com/vllm-project/vllm/issues/17652
 
 Cascade attention 의 핵심은 Multi query 가 들어온 경우 겹치는 부분 (shared query prefix) 의 KV-Cache와 나머지 부분의 KV-Cache 를 분리하는 것이다. 
 
-![image](https://github.com/user-attachments/assets/21a8514e-7a22-4795-9829-1bfe1f98fdb6)
+![image](https://github-production-user-asset-6210df.s3.amazonaws.com/57203764/463456536-21a8514e-7a22-4795-9829-1bfe1f98fdb6.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20250708%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250708T102035Z&X-Amz-Expires=300&X-Amz-Signature=70ad8c8d9c9491df160d8e527804038a3177faee38bd247fa270a05b1365a900&X-Amz-SignedHeaders=host)
 
 [출처](https://flashinfer.ai/2024/02/02/cascade-inference.html)
 
