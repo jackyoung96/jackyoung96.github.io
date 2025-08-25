@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Diary - DeepSeek-V3, GPT-5, 그리고 think-fusion
+title: Diary - DeepSeek-V3.1, GPT-5, 그리고 think-fusion
 tags: archive
 ---
 
