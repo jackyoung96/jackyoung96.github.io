@@ -4,17 +4,16 @@ title: "Diary - EFA와 InfiniBand, LLM 아래 숨겨진 인프라 이야기"
 tags: archive
 ---
 
-# EFA와 InfiniBand, LLM 아래 숨겨진 인프라 이야기
-
 LLM 학습시킬 때 아키텍처 디자인이나 학습 코드쪽 경험을 많이 쌓아왔는데, 사실 그 아래에는 GPU 클러스터를 비롯한 인프라가 있다. 
-SKT에 있을 때에는 인프라를 담당해주시던 전문가 분들이 계셔서 해당 부분을 자세히 보지 않았다. 근데 AWS는 클라우드 회사이기도 하고, 내가 풀 파이프라인을 풀스택으로 다 봐야 할 것 같다. 
+SKT에 있을 때에는 인프라를 담당해주시던 전문가 분들이 계셔서 해당 부분을 자세히 보지 않았다. 
+근데 AWS는 클라우드 회사이기도 하고, 내 포지션이 풀 파이프라인을 풀스택으로 다 봐야 할 것 같다. 
 그래서 이참에 인프라에 대해서 공부를 좀 해보려고 한다.
 
 ![image.png](https://github.com/user-attachments/assets/e8a42e0f-3102-4799-8e0d-997a54ecb257)
 
 그리고 사실 LLM 아키텍쳐나 학습 코드들도, 사실은 인프라의 구성이나 상황을 고려한 Infra-wise 로 설계해야 한다. 
 마음으로는 미리미리 공부해야한다고 생각했는데도, 항상 학습 코드 속도가 안나오거나 에러가 나는 문제가 생기고 나서야 살짝 공부하면서 해결하기 급급했던 것 같다. 
-그리고 사실 핵심은, **어떤 모델이 되었든 모델은 앞으로 점점 커질꺼지만 VRAM의 크기가 폭발적으로 증가하기는 어려울 것**이기 ****때문에 인프라 관련 지식 기반을 더 다져야 될 것 같다. 
+그리고 사실 핵심은, **어떤 모델이 되었든 모델은 앞으로 점점 커질꺼지만 VRAM의 크기가 폭발적으로 증가하기는 어려울 것**이기 때문에 인프라 관련 지식 기반을 더 다져야 될 것 같다. 
 그래야 새로운 아키텍쳐가 나왔을 때 이런 기초지식들을 잘 갖추고 있어야 더 빨리 적용할 수 있는, 더 뛰어나고 희소성 있는 AI 엔지니어가 될 수 있지 않을까. 
 
 처음 공부해 볼 내용은 대규모 GPU cluster의 핵심인 InfiniBand와, 그리고 AWS가 InfiniBand 대신 사용하는 EFA다. 
@@ -26,8 +25,8 @@ SKT에 있을 때에는 인프라를 담당해주시던 전문가 분들이 계�
 DeepSeek가 MoE모델을 가속화할 때 사용했던 DeepEP라는 라이브러리가 있다. 
 근데 이걸 AWS 클러스터에서 사용하려고 했더니 문제가 생겼다. 
 왜냐면 [DeepEP 라이브러리는 InfiniBand 사용을 가정](https://github.com/deepseek-ai/DeepEP/issues/369)하고 있기 때문이다! 
-문의를 해보니 놀랍게도 AWS는 100노드가 넘어가는 대형 클러스터였음에도 InfiniBand를 사용하고 있지 않고, Ethernet으로 연결하고 있다고 했다. 
-이때까지만해도 InfiniBand가 GPU 클러스터를 구성하는 필수품이라고 생각했었는데, 알고보니 AWS는 자체 기술인 EFA를 활용해 InfiniBand와 유사하게 노드간 네트워크 병목을 줄이고 있었다. 
+놀랍게도 AWS는 100노드가 넘어가는 대형 클러스터였음에도 InfiniBand를 사용하고 있지 않고, Ethernet으로 연결하고 있다고 했다. 
+이때까지만해도 InfiniBand가 GPU 클러스터를 구성하는 필수품이라고 생각했었는데, AWS는 자체 기술인 EFA를 활용해 InfiniBand와 유사하게 노드간 네트워크 병목을 줄이고 있었다. 
 AWS 입사했는데 이것도 몰라서 되겠어? 싶은 마음에 공부 시작!
 
 ### Inter-node network
@@ -61,10 +60,10 @@ GPU 서버를 구성할 때 전력 문제 때문에 랙 하나에는 GPU를 8장
 대표적인 제조사로는 Mellanox가 있는데, 2019년에 Nvidia에 69억달러 가치를 인정받고 인수되었다.
 
 InfiniBand의 중요한 점중 하나는 RDMA (Remote Direct Memory Access) 전용 네트워크라는 것이다. 
-RDMA라는걸 쉽게 말하면 **CPU나 운영체제의 개입 없이 메모리를 직접 읽고 쓰는 기술**이다. 
-GPU를 예로들면, GPU의 메모리인 VRAM에 데이터를 읽거나 쓰려면 원래는 CPU나 OS를 거쳐야 한다. 
+RDMA라는걸 쉽게 말하면 **메모리를 직접 읽고 쓰는 기술**이다. 
+아까 살펴봤듯이 GPU의 메모리인 VRAM에 데이터를 읽거나 쓰려면 원래는 CPU나 OS를 거쳐야 한다. 
 그게 무슨말이냐 하면 CPU로 일단 데이터 복사를 해와야 읽거나 쓸 수 있다는 말이다. 
-근데 RDMA라는건 그렇게 안하고 GPU에서 GPU로 바로 데이터를 옮길 수 있는 네트워크라고 보면 된다. 
+근데 RDMA라는건 그렇게 안하고 GPU 메모리에서 GPU 메모리로 바로 데이터를 옮길 수 있는 네트워크라고 보면 된다. 
 
 그러면 RDMA라는게 InfiniBand만 있느냐는 질문을 할 수 있는데, 그렇지 않다. 
 Nvidia에서 RoCE (RDMA over Converged Ethernet) 라는 솔루션을 개발했는데, Ethernet을 가지고 GPU RDMA를 하는것이다. 
@@ -83,7 +82,8 @@ EFA (Elastic Fabric Adapter)는 AWS 자체개발 네트워크 프로토콜인 **
 SRD라는건 TCP만큼 신뢰성을 보장하면서도 UDP처럼 단일경로가 아닌 다양한 네트워크로 정보를 주고 받기 위해 개발된 AWS 인프라에서만 동작하는 방식이다 ([TCP/UDP 설명 참고](https://mangkyu.tistory.com/15)). 
 SRD는 AWS의 [Annapurna Labs 에서 게재한 논문](https://ieeexplore.ieee.org/document/9167399)을 기반으로 하는 기술인데, 신기한 히스토리가 있다. 
 
-Annapurna Labs는 2015년 AWS가 3.7억달러에 인수한 이스라엘 반도체 회사로 현재 AWS 내에서 자체 반도체를 개발하고 있는 조직으로, 인수된 후에는 Graviton, Trainium 등 다양한 칩들을 개발하여 AWS의 컴퓨팅 비용 효율화에 기여하고 있다. 
+Annapurna Labs는 2015년 AWS가 3.7억달러에 인수한 이스라엘 반도체 회사로 현재 AWS 내에서 자체 반도체를 개발하고 있는 조직이다. 
+인수된 후에는 Graviton, Trainium 등 다양한 칩들을 개발하여 AWS의 컴퓨팅 비용 효율화에 기여하고 있다. 
 Annapurna Labs의 창업자는 Galileo Tech라는 반도체 칩 회사를 창업했던 이력이 있는데, InfiniBand의 제조사이자 Nvidia에 인수된 Mellanox의 창업자들 또한 Galileo Tech 임원진 출신이다. 
 뿌리가 비슷해서 그런지, 하는 생각도 비슷한가보다.
 
@@ -94,7 +94,7 @@ Application → MPI/NCCL → **Libfabric** → EFA 로 연결되는 구조라고
 **AWS는 결국 InfiniBand가 아니라 EFA를 사용함으로써 범용성을 선택**했다고 볼 수 있다. 
 GPU instance를 멀티노드로 원하는 사람이 많으면 모르겠는데, 싱글노드를 빌려버리면 inter-node network는 쓸모가 없다. 
 또 GPU가 아닌 instance 들도 다양하게 취급하니까 Ethernet 기반의 범용 네트워크를 깔아둘 수 밖에 없다. 
-다만 초대형 모델 개발자들이 있는 회사는 보통 On-prem cluster를 구축해서 쓰니까 보니까 아직까지는 InfiniBand에 dependency가 걸린 코드들이 많은 것 같다 (DeepEP도 그 중 하나…). 
+다만 **초대형 모델 개발자들이 있는 회사는 보통 On-prem cluster를 구축**해서 쓰니까 보니까 아직까지는 InfiniBand에 dependency가 걸린 코드들이 많은 것 같다 (DeepEP도 그 중 하나…). 
 앞으로 멀티노드 학습하는 오픈소스 컨트리뷰터들이 생기면 자연스레 해결될 문제일 것 같다.
 
 ### NVLink
