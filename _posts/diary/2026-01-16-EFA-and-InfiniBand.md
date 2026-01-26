@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Diary - EFA와 InfiniBand, LLM 아래 숨겨진 인프라 이야기"
-tags: hidden
+tags: archive
 ---
 
 LLM 학습시킬 때 아키텍처 디자인이나 학습 코드쪽 경험을 많이 쌓아왔는데, 사실 그 아래에는 GPU 클러스터를 비롯한 인프라가 있다. 
