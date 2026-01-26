@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Tutorial - LLM training with AWS Neuronx-distributed-training"
-tags: archive
+tags: hidden
 ---
 
 *2026.01.17 ver*
