@@ -42,6 +42,7 @@ HotpotQA에 사용되는 input (system prompt) 는 다음과 같다.
 ![image.png](https://github-production-user-asset-6210df.s3.amazonaws.com/57203764/553026075-99ef5e16-51db-4e5d-bc05-536eb4991fbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260221%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260221T164620Z&X-Amz-Expires=300&X-Amz-Signature=c239b7b6ee1a498b8df354b0626b36e2ce7e860fa1fabf9b9502b5ace788d7a9&X-Amz-SignedHeaders=host)
 
 **2단계: Self-Reflection**
+
 $$ \Delta \sim \pi_{reflection} (\cdot | x, y^{(1)}, f^{(1)}, r^{(1)}, m) $$
 
 모델의 첫 response에서 어떤 것이 잘못했고 어떻게 고쳐야 하는지 reflection을 생성한다. `m`은 cross-episode memory로, 이전에 효과적이었던 reflection들을 저장함으로써 전체 RL 학습 과정에서 얻은 정보들을 재활용한다.
@@ -96,7 +97,7 @@ Conditioned input 이 아닌 original input을 사용하는 것으로 기존보�
 
 경험적으로 RL에서 가장 중요한 시그널은 **동일한 prompt에 대한 완전히 다른 응답**이다. Reward가 높은 응답과 reward 낮은 응답이 밸런스있게 섞여 있어야 좋은 gradient를 받을 수 있다 (특히나 GRPO에서는). ERL은 강제로 second-attempt를 통해 동일 prompt 에 대해서 서로 다른 퀄리티의 응답 세트를 얻을 수 있게 만든다. 이게 포인트이지 않을까 싶다. 
 
-**3. 가장 효과가 큰 곳**: FrozenLake, Sokoban 같은 unknown dynamics + sparse-reward 환경
+**3. 가장 효과가 큰 곳**
 
 FrozenLake랑 Sokoban은 사실 LLM 능력이 있어도 쉽사리 풀기 어렵다. 아마 사람도 이미지 보면서 하면 쉬운데, 텍스트로 줘버리면 비교적 풀기 쉽지 않을거라 생각한다. 특히 논문에서 사용한 7B급 모델들은 바로 풀어낼 수는 없다. 근데, 한번도 성공을 못하면 아예 reward를 못받는 sparse reward라서 exploration 도 엄청 걸린다. 이런 케이스들에서는 효과가 크다는 것이다. 오히려 HotpotQA는 기본적으로 어느정도 역량이 있다보니 exploration cost가 덜 들고, ERL을 통한 성능 개선도 크지 않았다.
 
