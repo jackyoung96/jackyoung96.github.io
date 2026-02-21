@@ -5,7 +5,7 @@ title: Home
 
 I'm currently working at Amazon Web Service (AWS) as an Applied Scientist, especially focusing on model optimization for customers.
 
-I worked at SK Telecom as a AI engineer for 3 years, especially multi-node LLM instruction tuning and LLM alignment tuning. Prior to SK Telecom, I hold a master's student at the Electrical and Computer Engineering Department, Seoul National University (SNU), advised by [Seong-Woo Kim](https://aril.snu.ac.kr/) and [Seung-Woo Seo](https://vi.snu.ac.kr:58240/). I also hold a BS in Mechanical and Aerospace department from SNU. 
+I worked at SK Telecom as a AI engineer for 3 years, focusing on the post-training of Korean-specified LLM, [A.X](https://huggingface.co/skt/A.X-K1). Prior to SK Telecom, I hold a master's student at the Electrical and Computer Engineering Department, Seoul National University (SNU), advised by [Seong-Woo Kim](https://aril.snu.ac.kr/) and [Seung-Woo Seo](https://vi.snu.ac.kr:58240/). I also hold a BS in Mechanical and Aerospace department from SNU. 
 
 I interned in Aerospace Engineering Department from the University of Maryland (UMD), advised by [Michael W. Otte](http://ottelab.com/index.html).
 
