@@ -23,7 +23,7 @@ On-policy RL을 LLM 에 적용할 때 가장 큰 병목은 Generation이다. 어
 
 *논문에 이 그림이 있는데, 진짜 잘그렸다고 생각한다. 직관적으로 아이디어를 잘 표현한듯!*
 
-![image.png](https://github-production-user-asset-6210df.s3.amazonaws.com/57203764/553023510-1d4d0e1d-7dac-451b-97c9-136664fa8f77.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260221%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260221T164542Z&X-Amz-Expires=300&X-Amz-Signature=3dfa87a5f898eedf9316dc6b578ec28b19174bc69c8a39e7ec149d76401bf2f0&X-Amz-SignedHeaders=host)
+![alt text](../../imgs/posts/ERL-1.png)
 
 ERL은 결국 trajectory를 분석해서 exploration (trial & error) 을 줄일 수 있는 정보를 제공함으로써 학습 효율과 성능을 끌어올렸다. 논문에서는 이를 Experience-Reflection-Consolidation Loop 라고 부른다.
 
@@ -39,7 +39,8 @@ $$ (f^{(1)}, r^{(1)}) \sim \text{Env}(x, y^{(1)}) $$
 일단 첫 번째 시도를 한다. LLM policy $\pi_\theta$ 로부터 input $x$에 대한 response $y^{(1)}$을 뽑고, 이에 대한 reward $r^{(1)}$을 받는다. LLM judge 같은 걸 쓴다면 judge 과정에 대한 feedback $f^{(1)}$도 함께 얻는다 
 
 HotpotQA에 사용되는 input (system prompt) 는 다음과 같다.
-![image.png](https://github-production-user-asset-6210df.s3.amazonaws.com/57203764/553026075-99ef5e16-51db-4e5d-bc05-536eb4991fbf.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260221%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260221T164620Z&X-Amz-Expires=300&X-Amz-Signature=c239b7b6ee1a498b8df354b0626b36e2ce7e860fa1fabf9b9502b5ace788d7a9&X-Amz-SignedHeaders=host)
+
+![alt text](../../imgs/posts/ERL-2.png)
 
 **2단계: Self-Reflection**
 
@@ -51,7 +52,7 @@ $$ \Delta \sim \pi_{reflection} (\cdot | x, y^{(1)}, f^{(1)}, r^{(1)}, m) $$
 
 Reflection 은 이런식으로 system prompt를 주고 정보를 뽑아내게 된다.
 
-![image.png](https://github-production-user-asset-6210df.s3.amazonaws.com/57203764/553026416-8e8b79fa-b254-4ce8-ab7a-1094bacddf3c.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260221%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260221T164631Z&X-Amz-Expires=300&X-Amz-Signature=c58f3cbbb18d5e4a279e432332c31fe1f30cf708a416393230d0e848758af4ab&X-Amz-SignedHeaders=host)
+![alt text](../../imgs/posts/ERL-3.png)
 
 **3단계: Second Attempt**
 
@@ -81,7 +82,7 @@ Conditioned input 이 아닌 original input을 사용하는 것으로 기존보�
 
 논문에서는 FrozenLake, Sokoban, 그리고 HotpotQA에서 RLVR과 결과를 비교했다. FrozenLake랑 Sokoban은 퍼즐문제같은건데, 여기서는 LLM policy를 사용해서 풀었다. LLM task가 아니기 떄문에 보통 LLM이 아니라 state-action model 정의해서 RL을 적용하기도 한다. RL알고리즘은 GRPO를 사용했다.
 
-![image.png](https://github-production-user-asset-6210df.s3.amazonaws.com/57203764/553028228-ace74dea-7419-45e6-b849-96b738e51ecb.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260221%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260221T164647Z&X-Amz-Expires=300&X-Amz-Signature=24a416e5590068e6518122e322650fcd3ae034e9fa98e6d79bc099b2f1acf29c&X-Amz-SignedHeaders=host)
+![alt text](../../imgs/posts/ERL-4.png)
 
 실험 결과에서 주목할 점은 3가지다.
 
