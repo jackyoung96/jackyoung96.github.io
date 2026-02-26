@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Diary - LLM에서 효율적인 강화학습이란 무엇일까"
+title: "Diary - LLM에서 효율적인 강화학습이란 무엇일까 1"
 tags: archive
 ---
 
