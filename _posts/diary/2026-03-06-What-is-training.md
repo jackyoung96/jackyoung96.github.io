@@ -25,7 +25,7 @@ tags: archive
 **Step 5: Training (?)**  
 수정된 **정답** 다시 Claude Code한테 주고, "너가 쓴 거랑 비교해서 뭐가 달라졌는지 분석하고, 파이프라인 업데이트해"라고 시킨다.
 
-**Step 6: Repeat step 2 ~ step 5** 
+**Step 6: Repeat step 2 ~ step 5**  
 1~2회만 반복하면 거의 완벽한 글쓰기 봇이 나온다.
 
 
