@@ -2,22 +2,43 @@
 layout: page
 title: "Publications"
 ---
-#### ( J: journal / C: conference / P: patent / U: under review)
+#### (J: journal / C: conference / P: patent / A: Arxiv)
 <br>
 
-<h2 class="yearbar"> 2022 </h2>
+<h2 class="yearbar"> 2026 </h2>
 
-### [U3] Low-level controller in response to changes in quadrotor dynamics
+### [A3] Preference Packing: Efficient Preference Optimization for Large Language Models
+- **Jaekyung Cho**
+- [paper link](https://arxiv.org/pdf/2602.24082)
+
+### [A2] AX K1 Technical Report
+- Sung Jun Cheon, **Jaekyung Cho**, et al.
+- [paper link](https://arxiv.org/pdf/2601.09200)
+
+<h2 class="yearbar"> 2024 </h2>
+
+### [J2] Non-Line-of-Sight Vehicle Localization Based on Sound
+- Mingu Jeon*, **Jae-Kyung Cho*** (equal contribution), Hee-Yeun Kim, Byeonggyu Park, Seung-Woo Seo and Seong-Woo Kim
+- IEEE Transactions on Intelligent Transportation Systems (T-ITS), 2024
+- [paper link](https://ieeexplore.ieee.org/abstract/document/10790925)
+
+### [A1] MuNES: Multifloor Navigation Including Elevators and Stairs
+- Donghwi Jung, Chan Kim, Jae-Kyung Cho, and Seong-Woo Kim
+- [paper link](https://arxiv.org/abs/2402.04535)
+
+<h2 class="yearbar"> 2023 </h2>
+
+### [C6] SeRO: Self-Supervised Reinforcement Learning for Recovery from Out-of-Distribution Situations*
+- Chan Kim, **Jaekyung Cho**, Christophe Bobda, Seung-Woo Seo, Seong-Woo Kim
+- International Joint Conference on Artificial Intelligence(IJCAI), Macau, 2023
+- [paper link](https://arxiv.org/pdf/2311.03651)
+
+### [C5] Low-level controller in response to changes in quadrotor dynamics
 - **Jae-Kyung Cho**, Chan Kim, Mohamed Khalid M Jaffar, Michael W. Otte, and Seong-Woo Kim
-- Submitted to IEEE International Conference of Robotics and Automation
+- IEEE International Conference of Robotics and Automation (ICRA). 2023
+- [paper link](https://ieeexplore.ieee.org/document/10160987)
 
-### [U2] Virtual Contents for Children’s Enjoyment and Physical Activity during Remote Physical Education in the Pandemic Era
-- Soohyun Shin, **Jaekyoung Cho**, Kyunghwan Jang, and Seong-Woo Kim
-- Submitted to International Journal of Human–Computer Interaction
-
-### [U1] Blind Spot Detection through Sound
-- **Jae-Kyung Cho**, and Seong-Woo Kim
-- Submitted to IEEE Transactions on Intelligent Transportation Systems
+<h2 class="yearbar"> 2022 </h2>
 
 ### [J1] UNICON: Uncertainty-Conditioned Policy for Robust Behavior in Unfamiliar Scenarios
 - Chan Kim, **Jae-Kyung Cho**, Hyung-Suk Yoon, Seung-Woo Seo, and Seong-Woo Kim
