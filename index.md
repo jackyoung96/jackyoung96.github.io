@@ -11,7 +11,7 @@ I interned in Aerospace Engineering Department from the University of Maryland (
 
 ---
 
-Interest - Reinforcement learning, autonomous vehicle, motion planning, multi-agent system, human computer interaction, Deep learning
+Interest - LLM, Reinforcement learning, RLHF, Physical AI
 
 ---
 
