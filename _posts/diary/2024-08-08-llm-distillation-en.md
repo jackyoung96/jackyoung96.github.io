@@ -2,6 +2,7 @@
 layout: post
 title: Diary - LLM distillation envidence!!
 tags: archive
+lang: en
 ---
 
 I asked various LLMs (Large Language Models) for a BFS (Breadth-First Search) example in Korean.

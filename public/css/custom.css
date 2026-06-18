@@ -59,6 +59,26 @@ summary.bronze {
     color: #CD7F32;
 }
 
+.lang-toggle {
+    margin-left: 16px;
+    vertical-align: middle;
+    font-size: 16px;
+    color: #999;
+}
+.lang-toggle .lang-btn {
+    border: none;
+    background: transparent;
+    color: #999;
+    padding: 0 2px;
+    cursor: pointer;
+    font-size: inherit;
+    font-weight: normal;
+}
+.lang-toggle .lang-btn.active {
+    color: #268bd2;
+    font-weight: bold;
+}
+
 #search-bar {
     margin: 32px auto;
     border: 1px solid #ccc;

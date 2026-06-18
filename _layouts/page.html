@@ -3,6 +3,31 @@ layout: default
 ---
 
 <div class="page">
-  <h1 class="page-title">{{ page.title }}</h1>
+  <h1 class="page-title">
+    {{ page.title }}
+    {% if page.lang_toggle %}
+    <span class="lang-toggle" role="group" aria-label="Language">(<button type="button" class="lang-btn active" data-lang="ko">Ko</button>/<button type="button" class="lang-btn" data-lang="en">En</button>)</span>
+    {% endif %}
+  </h1>
   {{ content }}
 </div>
+
+{% if page.lang_toggle %}
+<script>
+(function () {
+  var buttons = document.querySelectorAll('.lang-toggle .lang-btn');
+  var sections = document.querySelectorAll('.lang-section');
+  function setLang(lang) {
+    buttons.forEach(function (b) { b.classList.toggle('active', b.dataset.lang === lang); });
+    sections.forEach(function (s) { s.hidden = s.dataset.lang !== lang; });
+    try { localStorage.setItem('archiveLang', lang); } catch (e) {}
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () { setLang(b.dataset.lang); });
+  });
+  var saved;
+  try { saved = localStorage.getItem('archiveLang'); } catch (e) {}
+  setLang(saved === 'en' ? 'en' : 'ko');
+})();
+</script>
+{% endif %}
