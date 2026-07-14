@@ -25,9 +25,9 @@ Fugu는 두 가지 버전이 있는데
 
 [Sakana Trinity](https://arxiv.org/html/2512.04695v3)는 Sakana Fugu의 의 근간이 된 논문이다. 여기서 orchestrator는 Qwen3-0.6B라는 작은 백본을 사용해서 어떤 LLM을 호출할지, 해당 LLM에게 어떤 role을 부여할지 classification 하는 모듈이다. 
 
-![alt text](../../imgs/posts/2026-07-01-llm-orchestration-router-0.png)
+![alt text](/imgs/posts/2026-07-01-llm-orchestration-router-0.png)
 
-![alt text](../../imgs/posts/2026-07-01-llm-orchestration-router-1.png)
+![alt text](/imgs/posts/2026-07-01-llm-orchestration-router-1.png)
 
 Role은 Thinker (T), Worker (W), 그리고 Verifier (V) 로 이루어지고, LLM은 GPT-5, Gemini-2.5-pro, Claude-4-Sonnet, Gemma-3-27B-It, DeepSeek-R1-Distill-Qwen-32B, Qwen3-3-32B 을 사용했다. 
 
@@ -41,7 +41,7 @@ Sakana Fugu는 Sakana Trinity의 모델 형태를 그대로 가져간다. 따라
 
 [Sakana Conductor](https://arxiv.org/abs/2512.04388)는 **텍스트를 생성하여 워크플로우를 만드는** orchestrator 라고 볼 수 있다. 스탭마다 Model과 Role 하나만 선택했던 Trinity와는 다르게, 여러 개의 model과 role을 동시에 호출할 수 있다.
 
-![alt text](../../imgs/posts/2026-07-01-llm-orchestration-router-2.png)
+![alt text](/imgs/posts/2026-07-01-llm-orchestration-router-2.png)
 
 워크플로우의 한 스텝은 세 가지로 구성된다.
 
