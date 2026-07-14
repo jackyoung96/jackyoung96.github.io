@@ -26,9 +26,9 @@ In any case, these models did not appear out of nowhere. Fugu grew out of a pape
 
 [Sakana Trinity](https://arxiv.org/html/2512.04695v3) is the paper that laid the foundation for Sakana Fugu. Its orchestrator uses a small Qwen3-0.6B backbone to classify which LLM to call and which role to assign to that LLM.
 
-![alt text](../../imgs/posts/2026-07-01-llm-orchestration-router-0.png)
+![alt text](/imgs/posts/2026-07-01-llm-orchestration-router-0.png)
 
-![alt text](../../imgs/posts/2026-07-01-llm-orchestration-router-1.png)
+![alt text](/imgs/posts/2026-07-01-llm-orchestration-router-1.png)
 
 The available roles are Thinker (T), Worker (W), and Verifier (V). The LLM pool consists of GPT-5, Gemini 2.5 Pro, Claude 4 Sonnet, Gemma 3 27B IT, DeepSeek-R1-Distill-Qwen-32B, and Qwen3-32B.
 
@@ -42,7 +42,7 @@ Sakana Fugu directly adopts Trinity's model architecture. It therefore solves pr
 
 [Sakana Conductor](https://arxiv.org/abs/2512.04388) can be understood as an orchestrator that **creates workflows by generating text**. Unlike Trinity, which selects only one model and one role at each step, Conductor can invoke multiple models and roles simultaneously.
 
-![alt text](../../imgs/posts/2026-07-01-llm-orchestration-router-2.png)
+![alt text](/imgs/posts/2026-07-01-llm-orchestration-router-2.png)
 
 Each step in a workflow consists of three elements:
 
